@@ -29,7 +29,7 @@ class AdminController extends Controller
 
 
         if ($request->ajax()) {
-            $user = User::where('role','user')->get();
+            $user = User::get();
             return DataTables::of($user)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
