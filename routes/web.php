@@ -56,18 +56,6 @@ Route::post('notes/todos/reorder', [UserTodoController::class, 'reorder'])->name
 Route::get('note/{tag}', [UserDashController::class, 'tagNotes'])->middleware(['auth', 'user'])->name('notes.tag');
 
 
-
-// Route::any('tags', function () {
-//     $search = preg_replace('/\s*, \s*/', '|', 'jun');
-
-//     $temp = Note::whereRaw("tag_id REGEXP '{$search}'")->get();
-//     // $temp = Note::where('tag_id', 'jun')->get();
-//     dd($temp);
-// });
-
-
-
-
 // ADMIN ROUTE
 Route::get('/admin_dashboard', [AdminDashController::class, 'index'])->middleware(['auth', 'admin'])->name('admin.dash');
 
