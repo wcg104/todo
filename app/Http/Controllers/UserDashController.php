@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Note;
 use App\Models\Tag;
 use App\Models\Todo;
-use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use PDF;
 
@@ -21,7 +19,6 @@ class UserDashController extends Controller
 
     public function index()
     {
-        // User::onlyTrashed()->where('id', 4)->restore();
         return redirect(Route('user.dash'));
     }
 
@@ -38,8 +35,6 @@ class UserDashController extends Controller
     {
         Note::find($id)->update(['status' => 'completed ']);
         return response()->json(['type' => 'success', 'message' => 'Note  Successfully completed']);
-
-        // return back();
     }
 
     public function noteArchive($id)
@@ -47,8 +42,6 @@ class UserDashController extends Controller
 
         Note::find($id)->update(['archive' => 1]);
         return response()->json(['type' => 'success', 'message' => 'Note archive Success']);
-
-        // return back();
     }
 
     public function archiveNote()
@@ -59,10 +52,8 @@ class UserDashController extends Controller
     public function noteUnarchive($id)
     {
 
-        // dd($id);
         Note::find($id)->update(['archive' => 0]);
         return response()->json(['type' => 'success', 'message' => 'Note Unarchive Success']);
-        // return back();
     }
 
     public function todoDone($id)
@@ -79,23 +70,13 @@ class UserDashController extends Controller
 
     public function generatePDF($id)
     {
-        // dd(Note::find($id)->with('todo')->first());
-        // dd(Note::find($id)->with('todo')->where('user_id', Auth::user()->id)->first()->todo);
-        $data = [
-            'note' => $id,
-            'todos' => Note::find($id)->with('todo')->where('user_id', Auth::user()->id)->first()->todo,
-            // 'title' => Note::find($id)->with('todo')->first()->title,
-            // 'tag' => Note::find($id)->with('todo')->first()->priority_level,
-            // 'tag' => Note::find($id)->with('todo')->first()->tag_id,
-            // 'status' => Note::find($id)->with('todo')->first()->status,
-        ];
-        
+
+
         $note_id = Note::findOrFail($id);
         $data = [
             'note' => $note_id,
             'todos' => Note::with('todo')->where('user_id', Auth::user()->id)->find($id)->todo,
         ];
-        // return view('user.pdf',$data);
         return PDF::loadView('user.pdf', $data)->download('print.pdf');
     }
 
@@ -103,10 +84,9 @@ class UserDashController extends Controller
 
     public function tagNotes($tag)
     {
-        $notes = Tag::where('title',$tag)->with('notes')->first()->notes;
+        $notes = Tag::where('title', $tag)->with('notes')->first()->notes;
         $tags = Note::with('tags')->get();
-        
-        return view('user.tagnotes', ['notes' => $notes,'tags'=>$tags]);
-        
+
+        return view('user.tagnotes', ['notes' => $notes, 'tags' => $tags]);
     }
 }

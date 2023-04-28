@@ -23,28 +23,11 @@ class UserTodoController extends Controller
     public function index($id, Request $request)
     {
 
-
-        //end
-
-
-        // dd(Note::with('todo')->where('user_id',Auth::user()->id)->find($id)->todo);
         if (Note::find($id)->user_id == Auth::user()->id) {
-            # code...
             return view('user.todo', ['note' => $id, 'todos' => Note::with('todo')->where('user_id', Auth::user()->id)->find($id)->todo]);
         } else {
             return redirect(Route('user.dash'));
         }
-
-
-        // dd(Note::find($id)->user_id);
-
-        // if (Note::find($id)->user_id == Auth::user()->id) {
-        //     # code...
-        //     return view('user.todo',['note'=>$id,'todos'=>Todo::where('note_id',$id)->where('user_id',Auth::user()->id)->get()]);
-        // }
-        // else{
-        //     return redirect(Route('user.dash'));
-        // }
 
     }
 
@@ -66,9 +49,6 @@ class UserTodoController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->note);
-
-        // dd($request->title);
         $request->validate([
             'title' => 'required|max:255',
 
@@ -78,7 +58,6 @@ class UserTodoController extends Controller
             'user_id' => Auth::user()->id,
             'note_id' => $request->note,
             'title' => $request->title,
-            // 'index_no' => $request->note,
             'index_no' => Todo::max('index_no') + 1,
             'created_at' => now(),
             'updated_at' => now(),
@@ -107,9 +86,7 @@ class UserTodoController extends Controller
      */
     public function edit($id)
     {
-        // dd($id);
         $product = Todo::find($id);
-
         return response()->json($product);
     }
 
@@ -122,10 +99,7 @@ class UserTodoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // dd($request->toArray());
-
         Todo::find($request->todo_id)->update(['title' => $request->name, 'updated_at' => now()]);
-
         return response()->json(['type' => 'success', 'message' => 'Todo Updated successfully!']);
     }
 
@@ -137,27 +111,21 @@ class UserTodoController extends Controller
      */
     public function destroy($id)
     {
-        // dd("delete");
         Todo::find($id)->delete();
         return response()->json(['type' => 'success', 'message' => 'Todo Deleted successfully!']);
     }
 
     public function reorder(Request $request)
     {
-        // dd($request->all());
-        $posts = Todo::all();
-
-        foreach ($posts as $post) {
+        $todos = Todo::all();
+        foreach ($todos as $todo) {
             foreach ($request->order as $order) {
-                if ($order['id'] == $post->id) {
-                    $post->update(['index_no' => $order['position']]);
+                if ($order['id'] == $todo->id) {
+                    $todo->update(['index_no' => $order['position']]);
                 }
             }
-        }
-       
+        }       
         return response()->json(['type' => 'success', 'message' => 'Todo Order Updated !']);
-
-
 
     }
 }

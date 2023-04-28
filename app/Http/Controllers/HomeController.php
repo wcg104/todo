@@ -89,11 +89,7 @@ class HomeController extends Controller
 
         $user->save();
 
-
-        // Auth::user()->update(['image' => $imageName]);
-
         return back()->with('success', 'image updated successfully.');
-        // return redirect('/')->with('success', 'Note Updated successfully!');
         
     }
 }

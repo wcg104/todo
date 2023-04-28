@@ -66,21 +66,12 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
-        // $validator = $request->validate([
-        //     'name' => 'required|max:255',
-        //     'email' => 'required|email',
-        //     // 'password' => 'required'
-        //     // 'todo_req' => 'required|max:255',
-        // ]);
-
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'email' => 'required|email',
             'number' => 'required',
 
         ]);
-        // dd($validator);
         if ($validator->fails()) {
 
             return response()->json(['error'=>$validator->errors()]);

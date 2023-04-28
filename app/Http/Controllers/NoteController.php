@@ -29,7 +29,6 @@ class NoteController extends Controller
     }
     public function index()
     {
-        // dd(User::with('note')->find(Auth::user()->id)->note);
 
         return view('user.notes', ['notes' => User::with('note')->find(Auth::user()->id)->note]);
     }
@@ -53,55 +52,10 @@ class NoteController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    // old 
-    // public function store(StoreNoteRequest $request)
-    // {
-    //     // dd($request->input('Priority_level'));
-
-    //     // dd($request->all());
-    //     $tags = [];
-    //     if ($request->tags) {
-    //         foreach ($request->tags as $key => $value) {
-    //             Tag::firstOrCreate(['title' => $value]);
-    //             array_push($tags,Tag::where('title', $value)->first()->id);
-
-    //         }
-    //     }
-
-    //     $notes = new Note();
-    //     $notes->user_id=Auth::user()->id;
-    //     $notes->title = $request->input('title');
-    //     $notes->priority_level = $request->input('Priority_level');
-    //     $notes->created_at = now();
-    //     $notes->updated_at = now();
-    //     $notes->save();
-    //     $notes->tags()->attach($tags);
-
-
-
-    //     foreach ($request->todo_list as $key => $value) {
-    //         Todo::create([
-    //             'user_id' => Auth::user()->id,
-    //             'note_id' => Note::latest()->first()->id,
-    //             'title' => $value,
-    //             'index_no' => Todo::max('index_no') + 1,
-    //             'created_at' => now(),
-    //             'updated_at' => now(),
-    //         ]);
-    //     }
-
-    //     return redirect('notes')->with('success', 'Note created successfully!');
-    //     // return back()->with('success', 'Note created successfully!');
-
-    // }
-
-    //end
 
     public function store(StoreNoteRequest $request)
     {
-        // dd($request->input('Priority_level'));
 
-        // dd($request->all());
         $tags = [];
         if ($request->tags) {
             foreach ($request->tags as $key => $value) {
@@ -275,8 +229,6 @@ class NoteController extends Controller
         $notes->tags()->detach();
         $notes->delete();
         Todo::where('note_id', $id)->delete();
-        // return redirect('notes')->with('success', 'Note Deleted successfully!');
-        // Todo::where('note_id',$id)->delete();
         return response()->json(['type' => 'success', 'message' => 'Note Deleted successfully!']);
     }
 }
