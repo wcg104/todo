@@ -53,7 +53,7 @@ class NoteController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-// old 
+    // old 
     // public function store(StoreNoteRequest $request)
     // {
     //     // dd($request->input('Priority_level'));
@@ -64,10 +64,10 @@ class NoteController extends Controller
     //         foreach ($request->tags as $key => $value) {
     //             Tag::firstOrCreate(['title' => $value]);
     //             array_push($tags,Tag::where('title', $value)->first()->id);
-               
+
     //         }
     //     }
-  
+
     //     $notes = new Note();
     //     $notes->user_id=Auth::user()->id;
     //     $notes->title = $request->input('title');
@@ -77,7 +77,7 @@ class NoteController extends Controller
     //     $notes->save();
     //     $notes->tags()->attach($tags);
 
-      
+
 
     //     foreach ($request->todo_list as $key => $value) {
     //         Todo::create([
@@ -106,13 +106,13 @@ class NoteController extends Controller
         if ($request->tags) {
             foreach ($request->tags as $key => $value) {
                 Tag::firstOrCreate(['title' => $value]);
-                array_push($tags,Tag::where('title', $value)->first()->id);
-               
+                array_push($tags, Tag::where('title', $value)->first()->id);
             }
         }
-  
+
+
         $notes = new Note();
-        $notes->user_id=Auth::user()->id;
+        $notes->user_id = Auth::user()->id;
         $notes->title = $request->input('title');
         $notes->priority_level = $request->input('Priority_level');
         $notes->created_at = now();
@@ -120,8 +120,7 @@ class NoteController extends Controller
         $notes->save();
         $notes->tags()->attach($tags);
 
-      
-
+        
         foreach ($request->todo_list as $key => $value) {
             Todo::create([
                 'user_id' => Auth::user()->id,
@@ -180,8 +179,7 @@ class NoteController extends Controller
         if ($request->tags) {
             foreach ($request->tags as $key => $value) {
                 Tag::firstOrCreate(['title' => $value]);
-                array_push($tags,Tag::where('title', $value)->first()->id);
-               
+                array_push($tags, Tag::where('title', $value)->first()->id);
             }
         }
 
@@ -194,10 +192,10 @@ class NoteController extends Controller
         $notes->updated_at = now();
         $notes->save();
         $notes->tags()->sync($tags);
-        
-        
 
-        
+
+
+
 
         //  all old todo are deleted
         if (!$request->todo_list) {
@@ -207,21 +205,20 @@ class NoteController extends Controller
             $oldTodo = [];
             foreach ($request->todo_list as $key => $value) {
                 array_push($oldTodo, $key);
-                
+
                 Todo::find($key)->update(['title' => $value, 'updated_at' => now()]);
             }
 
             // delete old todo
-            $oldTodoId = Todo::where('note_id',$id)->pluck('id');
+            $oldTodoId = Todo::where('note_id', $id)->pluck('id');
             foreach ($oldTodoId as $key => $value) {
                 if (!in_array($value, $oldTodo)) {
                     Todo::find($value)->delete();
                 }
             }
-
         }
 
-       
+
         // new todos
         if ($request->todo_list_new) {
             foreach ($request->todo_list_new as $key => $value) {

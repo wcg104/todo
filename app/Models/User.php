@@ -28,6 +28,7 @@ class User extends Authenticatable
         'number',
         'active',
         'image',
+        'google_id',
 
     ];
 

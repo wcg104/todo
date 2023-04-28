@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminDashController;
+use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\UserDashController;
@@ -30,10 +31,15 @@ Route::post('/change-password', [HomeController::class, 'updatePassword'])->name
 Route::get('/profile-update', [HomeController::class, 'updateProfile'])->name('update-profile');
 Route::POST('/profile-update', [HomeController::class, 'updateProfileStore'])->name('update-profile-store');
 
+Route::prefix('auth/google')->name('google.')->group( function(){
+    Route::get('/', [GoogleController::class, 'loginWithGoogle'])->name('login');
+    Route::any('callback', [GoogleController::class, 'callbackFromGoogle'])->name('callback');
+});
+
 
 Auth::routes();
 // USER ROUTE
-Route::get('/', [UserDashController::class, 'index']);
+Route::get('/', [UserDashController::class, 'index'])->name('home');
 
 Route::get('/home', [UserDashController::class, 'home'])->middleware(['auth', 'user'])->name('user.dash');
 
