@@ -443,7 +443,7 @@
                         },
                         success: function(data) {
                             // window.open("/");
-                            open("/");
+                            location.href = "/";
                         }
                     });
 
