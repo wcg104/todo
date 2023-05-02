@@ -37,6 +37,7 @@ class AdminController extends Controller
                     $btn = $btn . '<a href="javascript:void(0)" data-id="' . $row->id . '" class="unblockUser" title="active"> <i class="fas fa-check text-success me-3 mr-3"></i></a>';
                     $btn = $btn . '<a href="javascript:void(0)" data-id="' . $row->id . '" class="blockUser" title="ban"> <i class="fa fa-ban mr-3 text-danger" aria-hidden="true"></i>';
                     $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" class="deleteUser"  data-id="' . $row->id . '" title="Delete"> <i class="fas fa-trash-alt text-danger mr-3" aria-hidden="true"></i></a>';
+                    $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" class="loginAs"  data-id="' . $row->id . '" title="Login as"> <i class="fa fa-sign-in-alt text-secondary mr-3" aria-hidden="true"></i></a>';
 
                     return $btn;
                 })

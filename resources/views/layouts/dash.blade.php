@@ -159,6 +159,15 @@
             </li>
             {{-- end  --}}
 
+            {{-- return back admin  --}}
+            @if (Session::get('hasClonedUser') == 1)
+                <li class="nav-item">
+                    <a class="nav-link collapsed" onclick="event.preventDefault(); document.getElementById('cloneuser-form').submit();"><i class="fa fa-step-backward" aria-hidden="true"></i><span>Return Back</span></a>
+                    <form id="cloneuser-form" action="{{ url('users/loginas') }}" method="post">
+                        {{ csrf_field() }}
+                    </form>
+                </li>
+            @endif
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 

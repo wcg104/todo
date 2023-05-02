@@ -202,10 +202,6 @@
             });
 
 
-
-
-
-
             $('#addUser').click(function() {
                 $('#saveBtn').val("create-product");
                 $('#user_id').val('');
@@ -393,8 +389,6 @@
 
 
             });
-
-
             // validate add user and update user
 
             $('#userForm').validate({
@@ -416,6 +410,46 @@
                 },
 
 
+            })
+
+        });
+    </script>
+
+{{-- login as user  --}}
+    <script type="text/javascript">
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('body').on('click', '.loginAs', function() {
+            var user_id = $(this).data("id");
+
+            Swal.fire({
+                title: 'Login as User:' + user_id,
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Login it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: 'POST',
+                        url: "" + 'users/loginas',
+                        data: {
+                            user_id: user_id,
+
+                        },
+                        success: function(data) {
+                            // window.open("/");
+                            open("/");
+                        }
+                    });
+
+
+
+                }
             })
 
         });

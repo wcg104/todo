@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminDashController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LoginAsUser;
 use App\Http\Controllers\NoteController;
 use App\Http\Controllers\UserDashController;
 use App\Http\Controllers\UserTodoController;
@@ -84,6 +85,7 @@ Route::get('user/ban/{id}', [AdminDashController::class, 'userBan'])->middleware
 
 Route::get('user/unban/{id}', [AdminDashController::class, 'userActive'])->middleware(['auth', 'admin'])->name('admin.unban');
 
+Route::post('users/loginas',  [LoginAsUser::class,'loginAs']);
 
 
 
