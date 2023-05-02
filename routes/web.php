@@ -36,24 +36,26 @@ Route::prefix('auth/google')->name('google.')->group( function(){
     Route::any('callback', [GoogleController::class, 'callbackFromGoogle'])->name('callback');
 });
 
-
+Auth::routes(['verify' => true]);
 Auth::routes();
 // USER ROUTE
-Route::get('/', [UserDashController::class, 'index'])->name('home');
 
-Route::get('/home', [UserDashController::class, 'home'])->middleware(['auth', 'user'])->name('user.dash');
+Route::group(['middleware' => ['auth', 'user', 'verified']], function () {
+    Route::get('/', [UserDashController::class, 'index'])->name('home');
+    Route::get('/home', [UserDashController::class, 'home'])->name('user.dash');
+    Route::resource('notes', NoteController::class);
+    Route::resource('notes.todos', UserTodoController::class)->shallow();
+    Route::get('notes/done/{id}', [UserDashController::class, 'noteDone'])->name('notes.done');
+    Route::get('notes/archive/{id}', [UserDashController::class, 'noteArchive'])->name('notes.archive');
+    Route::get('/archive/notes', [UserDashController::class, 'archiveNote'])->name('archive.note');
+    Route::get('/unarchive/notes/{id}', [UserDashController::class, 'noteUnarchive'])->name('notes.unarchive');
+    Route::get('notes/todos/done/{id}', [UserDashController::class, 'todoDone'])->name('todo.done');
+    Route::get('notes/todos/pending/{id}', [UserDashController::class, 'todoPending'])->name('todo.pending');
+    Route::get('notes/generate-pdf/{id}', [UserDashController::class, 'generatePDF'])->name('note.pdf');
+    Route::post('notes/todos/reorder', [UserTodoController::class, 'reorder'])->name('todos.reorder');
+    Route::get('note/{tag}', [UserDashController::class, 'tagNotes'])->name('notes.tag');
+});
 
-Route::resource('notes', NoteController::class)->middleware(['auth', 'user']);
-Route::resource('notes.todos', UserTodoController::class)->shallow()->middleware(['auth', 'user']);
-Route::get('notes/done/{id}', [UserDashController::class, 'noteDone'])->middleware(['auth', 'user'])->name('notes.done');
-Route::get('notes/archive/{id}', [UserDashController::class, 'noteArchive'])->middleware(['auth', 'user'])->name('notes.archive');
-Route::get('/archive/notes', [UserDashController::class, 'archiveNote'])->middleware(['auth', 'user'])->name('archive.note');
-Route::get('/unarchive/notes/{id}', [UserDashController::class, 'noteUnarchive'])->middleware(['auth', 'user'])->name('notes.unarchive');
-Route::get('notes/todos/done/{id}', [UserDashController::class, 'todoDone'])->middleware(['auth', 'user'])->name('todo.done');
-Route::get('notes/todos/pending/{id}', [UserDashController::class, 'todoPending'])->middleware(['auth', 'user'])->name('todo.pending');
-Route::get('notes/generate-pdf/{id}', [UserDashController::class, 'generatePDF'])->middleware(['auth', 'user'])->name('note.pdf');
-Route::post('notes/todos/reorder', [UserTodoController::class, 'reorder'])->name('todos.reorder');
-Route::get('note/{tag}', [UserDashController::class, 'tagNotes'])->middleware(['auth', 'user'])->name('notes.tag');
 
 
 

@@ -4,7 +4,7 @@
 @endsection
 
 @section('head')
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 @endsection
 
 
@@ -12,14 +12,6 @@
     <div class="row">
         <div class="col-12">
             <div class="card shadow m-4">
-                {{-- <div class="card-header py-3">
-                    <h5 class="mb-0"><i class="fas fa-tasks me-2"></i>Task List</h5>
-
-                </div>
-                <div class="card-footer text-end p-3">
-                    <button class="me-2 btn btn-link">Cancel</button>
-                    <button class="btn btn-primary">Add Task</button>
-                </div> --}}
                 <div class="card-body">
                     <p class="h1 text-center mt-3 mb-4 pb-3 text-primary">
                         <i class="fas fa-check-square me-1"></i>
@@ -78,49 +70,10 @@
                                             @endif
 
                                         </div>
-
-                                        {{-- <div class="form-check">
-
-                                            @if ($todo->status == 'pending')
-                                                <input class="form-check-input me-0 checkbox" data-id={{ $todo->id }}
-                                                    type="checkbox" value="" id="flexCheckChecked2"
-                                                    aria-label="..." />
-                                            @else
-                                                <input class="form-check-input me-0 checkbox" data-id={{ $todo->id }}
-                                                    type="checkbox" value="" id="flexCheckChecked2" aria-label="..."
-                                                    checked />
-                                            @endif
-
-                                        </div> --}}
                                     </td>
 
-                                    {{-- <td>
-
-                                        <div class="form-check">                                    
-                                          
-                                            @if ($todo->status == 'pending')
-                                                <input class="form-check-input me-0 checkbox" data-id={{ $todo->id }}
-                                                    type="checkbox" value="" id="flexCheckChecked2"
-                                                    aria-label="..." />
-                                            @else
-                                                <input class="form-check-input me-0 checkbox" data-id={{ $todo->id }}
-                                                    type="checkbox" value="" id="flexCheckChecked2" aria-label="..."
-                                                    checked />
-                                            @endif
-                                            
-                                        </div>
-                                    </td> --}}
                                     <td class="align-middle">
                                         <span id="maintitle">{{ $todo->title }}</span>
-
-                                        {{-- <span  ><input type="text" style="display: none;" id="title" value="{{ $todo->title }}"
-                                                ></span>
-                                        <span ><button type="submit" class="btn-secondary" style="display: none;" id="back"
-                                                >Cancel</button></span>
-
-                                        <span><button type="submit" class="btn-success" style="display: none;" id="submit"
-                                                >Submit</button></span> --}}
-
                                     </td>
                                     @if ($todo->status == 'pending')
                                         <td class="align-middle">
@@ -132,14 +85,8 @@
                                             </h6>
                                         </td>
                                     @endif
-                                    {{-- <td class="align-middle">
-                                    <h6 class="mb-0"><span class="badge bg-danger text-light">Pending</span></h6>
-                                </td> --}}
-
 
                                     <td class="align-middle">
-                                        {{-- <a href="#!" data-mdb-toggle="tooltip" title="Done"><i
-                                                class="fas fa-check text-success mr-3"></i></a> --}}
 
                                         <a title="edit" data-id={{ $todo->id }}
                                             data-action="{{ route('todos.edit', ['todo' => $todo->id]) }}"
@@ -232,8 +179,8 @@
         });
     </script>
 
-
-
+  
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
     <script type="text/javascript">
         // end table 
@@ -391,7 +338,7 @@
     <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 
     <!-- Datatables Js-->
-    <script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
+    {{-- <script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script> --}}
 
     <script type="text/javascript">
         $(function() {

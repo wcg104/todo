@@ -20,6 +20,14 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-3 m-2">
+                        <label for="selectStatus">Search:</label>
+                        <select id="selectStatus">
+                            <option value=""></option>
+                        </select>
+                    </div>
+                </div>
                 <div class="card-body">
                     <table class="table data-table">
                         <thead>
@@ -169,6 +177,28 @@
                         }
                     }
                 }, ],
+
+                // dropdown fliter 
+                initComplete: function() {
+                    this.api().columns([4]).every(function() {
+                        var column = this;
+                        var select = $('#selectStatus')
+                            .on('change', function() {
+                                var val = $(this).val();
+                                column.search(val).draw();
+                            });
+
+                        column.data().unique().sort().each(function(d, j) {
+                            if (d == 0) {
+                                select.append('<option value="' + d + '">' + "Blocked" +
+                                    '</option>')
+                            } else {
+                                select.append('<option value="' + d + '">' + "Active" +
+                                    '</option>')
+                            }
+                        });
+                    });
+                }
             });
 
 
