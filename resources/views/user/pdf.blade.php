@@ -27,11 +27,20 @@
                         <u>Todo-s</u>
                     </p>
 
+                    <div class="row m-2">
+                        <span>Title : {{$note->title}}</span>
+
+                    </div>
+                    <div class="row m-2">
+                        <span>status : {{$note->status}}</span>
+                    </div>
+                    <div class="row m-2">
+                        <span>Total Task : {{$todos->count() }}</span>
+                    </div>
                     
-                    <table class="table mb-0 " id="myTable">
+                    <table class="table m-3 " id="myTable">
                         <thead>
                             <tr>
-                                <th scope="col"></th>
                                 <th scope="col">Task</th>
                                 {{-- <th scope="col">Priority</th> --}}
                                 <th scope="col">Status</th>
@@ -42,22 +51,7 @@
 
                             @foreach ($todos as $todo)
                                 <tr class="fw-normal">
-                                    <th>
-
-                                        <div class="form-check">
-                                            @if ($todo->status == 'pending')
-                                                <input class="form-check-input me-0 checkbox" data-id={{ $todo->id }}
-                                                    type="checkbox" value="" id="flexCheckChecked2"
-                                                    aria-label="..." />
-                                            @else
-                                                <input class="form-check-input me-0 checkbox" data-id={{ $todo->id }}
-                                                    type="checkbox" value="" id="flexCheckChecked2" aria-label="..."
-                                                    checked />
-                                            @endif
-                                            {{-- <input class="form-check-input me-0 checkbox" data-id={{ $todo->id }}
-                                                type="checkbox" value="" id="flexCheckChecked2" aria-label="..."  /> --}}
-                                        </div>
-                                    </th>
+                                
                                     <td class="align-middle">
                                         <span id="maintitle">{{ $todo->title }}</span>
 
