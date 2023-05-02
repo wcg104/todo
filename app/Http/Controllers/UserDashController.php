@@ -78,7 +78,7 @@ class UserDashController extends Controller
             'todos' => Note::with('todo')->where('user_id', Auth::user()->id)->find($id)->todo,
         ];
         // dd($data);
-        return view('user.pdf', $data);
+        // return view('user.pdf', $data);
         return PDF::loadView('user.pdf', $data)->download('print.pdf');
     }
 
