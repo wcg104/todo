@@ -22,9 +22,9 @@
                 </div>
                 <div class="row">
                     <div class="col-3 m-2">
-                        <label for="selectStatus">Search:</label>
+                        <label for="selectStatus">Status:</label>
                         <select id="selectStatus">
-                            <option value=""></option>
+                            <option value="">ALL</option>
                         </select>
                     </div>
                 </div>

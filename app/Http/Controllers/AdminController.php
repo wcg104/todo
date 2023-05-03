@@ -88,7 +88,8 @@ class AdminController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'number' => $request->number,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
+                'email_verified_at'=>now()
             ]);
             $user->newpass = $request->password;
             // send mail

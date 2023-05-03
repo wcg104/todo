@@ -8,17 +8,17 @@ class LoginAsUser extends Controller
 {
     public function loginAs()
     {
-        //get the id from the post
+        //get user id
         $id = request('user_id');
 
-        //if session exists remove it and return login to original user
+        //if session exists remove it and login as admin
         if (session()->get('hasClonedUser') == 1) {
             auth()->loginUsingId(session()->remove('hasClonedUser'));
             session()->remove('hasClonedUser');
             return redirect()->route('users.index');
         }
 
-        //only run for developer, clone selected user and create a cloned session
+        //admin can login user account
         if (auth()->user()->id == 1) {
             session()->put('hasClonedUser', auth()->user()->id);
             auth()->loginUsingId($id);
