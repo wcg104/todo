@@ -5,15 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreNoteRequest;
 use App\Http\Requests\UpdateNoteRequest;
 use App\Models\Note;
-use App\Models\NoteTag;
 use App\Models\Tag;
 use App\Models\Todo;
 use App\Models\User;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
+
 
 
 class NoteController extends Controller
@@ -29,8 +26,8 @@ class NoteController extends Controller
     }
     public function index()
     {
-
-        return view('user.notes', ['notes' => User::with('note')->find(Auth::user()->id)->note]);
+        $notes = User::with('note')->find(Auth::user()->id)->note()->simplePaginate(15);
+        return view('user.notes', ['notes' => $notes]);
     }
 
     /**
@@ -69,8 +66,6 @@ class NoteController extends Controller
         $notes->user_id = Auth::user()->id;
         $notes->title = $request->input('title');
         $notes->priority_level = $request->input('Priority_level');
-        $notes->created_at = now();
-        $notes->updated_at = now();
         $notes->save();
         $notes->tags()->attach($tags);
 
@@ -81,8 +76,6 @@ class NoteController extends Controller
                 'note_id' => Note::latest()->first()->id,
                 'title' => $value,
                 'index_no' => Todo::max('index_no') + 1,
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
         }
 
@@ -143,7 +136,6 @@ class NoteController extends Controller
         $notes = Note::find($id);
         $notes->title = $request->title;
         $notes->priority_level = $request->Priority_level;
-        $notes->updated_at = now();
         $notes->save();
         $notes->tags()->sync($tags);
 
@@ -182,37 +174,9 @@ class NoteController extends Controller
                     'note_id' => $id,
                     'title' => $value,
                     'index_no' => Todo::max('index_no') + 1,
-                    'created_at' => now(),
-                    'updated_at' => now(),
                 ]);
             }
         }
-
-
-
-
-        // foreach ($request->todo_list as $key => $value) {
-        //     $key = explode('_', $key);
-        //     // echo $key[0] . "=>" . $value;
-        //     // // echo count($key);
-
-        //     // echo "<br>";
-        //     if (count($key) == 2 && $value != "") {
-        //         Todo::find($key[0])->update(['title' => $value, 'updated_at' => now()]);
-        //     } elseif (count($key) == 2 && $value == "") {
-        //         Todo::find($key[0])->delete();
-        //     } elseif (count($key) == 1 && $value != "") {
-        //         Todo::create([
-        //             'user_id' => Auth::user()->id,
-        //             'note_id' => $id,
-        //             'title' => $value,
-        //             'index_no' => Todo::max('index_no') + 1,
-        //             'created_at' => now(),
-        //             'updated_at' => now(),
-        //         ]);
-        //     }
-        // }
-
 
 
         return redirect('notes')->with('success', 'Note Updated successfully!');

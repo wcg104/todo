@@ -59,8 +59,6 @@ class UserTodoController extends Controller
             'note_id' => $request->note,
             'title' => $request->title,
             'index_no' => Todo::max('index_no') + 1,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
 
         return redirect()->route('notes.todos.index', ['note' => $request->note])->with('success', 'TODO created successfully!');

@@ -19,7 +19,7 @@ class Note extends Model
         'status',
         'archive',
     ];
-
+    public $timestamps = true;
 
 
     public function user()

@@ -15,7 +15,7 @@ class Tag extends Model
         'title',
        
     ];
-
+    public $timestamps = true;
     public function notes()
     {
         return $this->belongsToMany(Note::class,'note_tags');

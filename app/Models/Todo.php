@@ -18,7 +18,7 @@ class Todo extends Model
         'user_id',
         'file',
     ];
-
+    public $timestamps = true;
     public function note()
     {
         return $this->belongsTo(Note::class);

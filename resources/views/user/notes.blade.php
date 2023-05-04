@@ -45,8 +45,8 @@
                                     {{-- <td>{{ $loop->index+1+((($notes->currentPage())-1)*15)}}</td> --}}
 
                                     <td class="align-middle">
-                                        {{ ++$key }}
-                                        {{-- {{ ($notes->currentpage() - 1) * $notes->perpage() + $key + 1 }} --}}
+                                        {{-- {{ ++$key }} --}}
+                                        {{ ($notes->currentpage() - 1) * $notes->perpage() + $key + 1 }}
                                     </td>
 
                                     <td class="align-middle">
@@ -101,10 +101,13 @@
                             @endforeach
                         </tbody>
                     </table>
+                    <div class="m-2">
+
+                        {{ $notes->links() }}
+                    </div>
                 </div>
             </div>
         </div>
-        {{-- {{ $notes->links() }} --}}
 
     </div>
     {{-- Delete Note  --}}
