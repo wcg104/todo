@@ -87,10 +87,10 @@ class BulkNotesController extends Controller
                     // file move 
                     $image_name = null;
                     if ($row[5]) {
-                        if (getimagesize($row[5])) {
+                        $image = @file_get_contents("$row[5]");
+                        if ($image) {
                             Log::info(getimagesize($row[5]));
-                            // $image = file_get_contents("$row[5]");
-                            $b64image = base64_encode(file_get_contents("$row[5]"));
+                            $b64image = base64_encode($image);
                             $image = base64_decode($b64image);
                             $image_name = time().".png";
                             Storage::disk('public')->put('todoImage/'.$image_name,$image);
@@ -100,8 +100,7 @@ class BulkNotesController extends Controller
                     $todos->file =  $image_name;
                     $todos->save();
                 }
-                // foreach ($csvData as $key => $row) {
-                // }
+             
             }
         }
         // dd( $validRows);

@@ -165,6 +165,7 @@ class NoteController extends Controller
 
             // delete old todo
             $oldTodoId = Todo::where('note_id', $id)->pluck('id');
+            
             foreach ($oldTodoId as $key => $value) {
                 if (!in_array($value, $oldTodo)) {
                     Todo::find($value)->delete();

@@ -30,6 +30,7 @@ class AdminController extends Controller
 
         if ($request->ajax()) {
             $user = User::where('role','user')->get();
+            
             return DataTables::of($user)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -81,6 +82,7 @@ class AdminController extends Controller
 
         if ($request->user_id) {
             User::find($request->user_id)->update(['name' => $request->name, 'email' => $request->email, 'number' => $request->number]);
+
             return response()->json(['type' => 'success', 'message' => ' User Data Updated successfully!']);
         } else {
 
@@ -142,6 +144,7 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
+        //
         User::find($id)->delete();
         Note::where('user_id', $id)->delete();
         Todo::where('user_id', $id)->delete();
