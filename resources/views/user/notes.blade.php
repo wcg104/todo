@@ -9,6 +9,10 @@
         <a class="btn btn-secondary ml-5 mb-3" href="{{ route('notes.create') }}">
             <span>Add New Note</span>
         </a>
+
+        <a class="btn btn-secondary ml-5 mb-3" href="{{ route('bulk.index') }}">
+            <span>Bulk csv upload</span>
+        </a>
         {{-- <button type="button" class="btn btn-secondary ml-5 mb-3">Add New Note</button> --}}
     </div>
 

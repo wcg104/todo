@@ -16,6 +16,7 @@ class Todo extends Model
         'status',
         'index_no',
         'user_id',
+        'file',
     ];
 
     public function note()

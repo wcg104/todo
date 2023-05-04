@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AdminDashController;
+use App\Http\Controllers\BulkNotesController;
 use App\Http\Controllers\GoogleController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginAsUser;
@@ -55,18 +56,12 @@ Route::group(['middleware' => ['auth', 'user', 'verified']], function () {
     Route::get('notes/generate-pdf/{id}', [UserDashController::class, 'generatePDF'])->name('note.pdf');
     Route::post('notes/todos/reorder', [UserTodoController::class, 'reorder'])->name('todos.reorder');
     Route::get('note/{tag}', [UserDashController::class, 'tagNotes'])->name('notes.tag');
+    Route::get('bulk', [BulkNotesController::class, 'index'])->name('bulk.index');
+    Route::post('bulk', [BulkNotesController::class, 'dataStore'])->name('bulk.store');
+    
+
+
 });
-
-
-
-
-// Route::any('tags', function () {
-//     $search = preg_replace('/\s*, \s*/', '|', 'jun');
-
-//     $temp = Note::whereRaw("tag_id REGEXP '{$search}'")->get();
-//     // $temp = Note::where('tag_id', 'jun')->get();
-//     dd($temp);
-// });
 
 
 
