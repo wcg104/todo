@@ -84,8 +84,11 @@
     <script>
         $(".unarchiveNote").click(function() {
             var id = $(this).data("id");
-            var url = "{{ route('notes.unarchive', ':id') }}";
+            var archive = 0 ;
+            var url = "{{ route('notes.archive', [':id',':archive']) }}";
             url = url.replace(':id', id);
+            url = url.replace(':archive', archive);
+
             $.ajax({
                 url: url,
                 type: 'get',
@@ -96,15 +99,12 @@
                             icon: 'success',
                             height: 10,
                             width: 350,
-                            title: res.message,
+                            title: "Unarchive Note",
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function() {
                             location.reload();
                         });
-
-
-
                     }
                 }
             });

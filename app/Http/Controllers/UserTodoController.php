@@ -113,6 +113,7 @@ class UserTodoController extends Controller
         return response()->json(['type' => 'success', 'message' => 'Todo Deleted successfully!']);
     }
 
+    // change todo order 
     public function reorder(Request $request)
     {
         $todos = Todo::all();

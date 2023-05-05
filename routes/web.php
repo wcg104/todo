@@ -48,17 +48,15 @@ Route::group(['middleware' => ['auth', 'user', 'verified']], function () {
     Route::resource('notes', NoteController::class);
     Route::resource('notes.todos', UserTodoController::class)->shallow();
     Route::get('notes/done/{id}', [UserDashController::class, 'noteDone'])->name('notes.done');
-    Route::get('notes/archive/{id}', [UserDashController::class, 'noteArchive'])->name('notes.archive');
+    Route::get('notes/archive/{id}/{archive}', [UserDashController::class, 'noteArchiveUnarchive'])->name('notes.archive');
     Route::get('/archive/notes', [UserDashController::class, 'archiveNote'])->name('archive.note');
-    Route::get('/unarchive/notes/{id}', [UserDashController::class, 'noteUnarchive'])->name('notes.unarchive');
-    Route::get('notes/todos/done/{id}', [UserDashController::class, 'todoDone'])->name('todo.done');
-    Route::get('notes/todos/pending/{id}', [UserDashController::class, 'todoPending'])->name('todo.pending');
+    Route::get('notes/todos/done/{id}/{status}', [UserDashController::class, 'todoStatusChange'])->name('todo.status');
     Route::get('notes/generate-pdf/{id}', [UserDashController::class, 'generatePDF'])->name('note.pdf');
     Route::post('notes/todos/reorder', [UserTodoController::class, 'reorder'])->name('todos.reorder');
     Route::get('note/{tag}', [UserDashController::class, 'tagNotes'])->name('notes.tag');
     Route::get('bulk', [BulkNotesController::class, 'index'])->name('bulk.index');
     Route::post('bulk', [BulkNotesController::class, 'dataStore'])->name('bulk.store');
-    
+    Route::POST('/tags', [HomeController::class, 'getTags'])->name('search.tags');
 
 
 });

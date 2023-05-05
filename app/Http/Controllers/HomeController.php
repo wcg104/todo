@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tag;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,13 +43,13 @@ class HomeController extends Controller
         ]);
 
 
-        #Match The Old Password
+        //Match The Old Password
         if (!Hash::check($request->old_password, auth()->user()->password)) {
             return back()->with("error", "Old Password Doesn't match!");
         }
 
 
-        #Update the new Password
+        //Update the new Password
         User::whereId(auth()->user()->id)->update([
             'password' => Hash::make($request->new_password)
         ]);
@@ -69,7 +70,7 @@ class HomeController extends Controller
         $request->validate([
             'image' => 'image',
             'name' =>'required',
-            'email' =>'required|email',
+            'email' =>"required|email|unique:users,email, $request->id",
             'number' => 'required',
         ]);
       
@@ -77,20 +78,34 @@ class HomeController extends Controller
         $user->name = $request->name;
         $user->email = $request->email;
         $user->number = $request->number;
+        $oldImage = "images/".Auth::user()->image;
         if ($request->image) {
-            $imageName = $user->id . '.' . $request->image->getClientOriginalExtension();           
-            $image_path = "image/".$imageName;
-            if (file_exists($image_path)) {
-                @unlink($image_path);
-            }
+            $imageName = $user->id . time() . '.' . $request->image->getClientOriginalExtension();           
             $request->image->move(public_path('images'), $imageName);
             $user->image = $imageName;
         }
-
+        if ($request->imageRemove == "true") {
+            if (file_exists(public_path($oldImage))) {
+                @unlink(public_path($oldImage));
+            } 
+            $user->image = null;
+        }
+        
         $user->save();
+
+        if (file_exists(public_path($oldImage))) {
+            @unlink(public_path($oldImage));
+        }
 
         return back()->with('success', 'image updated successfully.');
         
+    }
+
+    // get tags 
+    public function getTags(Request $request)
+    {
+        $tags = Tag::where('title', 'LIKE', ''.$request->tag.'%') ->get();
+        return response()->json(['type' => 'success', 'message' => $tags]);
     }
 }
 

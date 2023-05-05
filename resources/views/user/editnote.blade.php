@@ -62,19 +62,21 @@
 
                             <label for="select2Multiple">Tags</label>
                             {{-- @php $noteTags = explode(',', $notes->tag_id); @endphp --}}
-                            @php
+                            {{-- @php
                                 $noteTags = [];
                                 foreach ($notes->tags as $selectedTag) {
                                     array_push($noteTags, $selectedTag->title);
                                 }
-                            @endphp
+                            @endphp --}}
 
                             <select class="select2-multiple form-control" name="tags[]" value="" multiple="multiple"
                                 id="select2Multiple">
-
-                                @foreach ($tags as $tag)
-                                    <option value="{{ $tag->title }}" {{ in_array($tag->title, $noteTags) ? 'selected' : '' }}>{{ $tag->title }}</option>
+                                @foreach ($notes->tags as $selectedTag)
+                                    <option value="{{ $selectedTag->title }}" selected>{{ $selectedTag->title }}</option>
                                 @endforeach
+                                {{-- @foreach ($tags as $tag)
+                                    <option value="{{ $tag->title }}" {{ in_array($tag->title, $noteTags) ? 'selected' : '' }}>{{ $tag->title }}</option>
+                                @endforeach --}}
                             </select>
 
                         </div>
@@ -243,18 +245,41 @@
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
     <script>
         $(document).ready(function() {
-            // Select2 Multiple
-            $('.select2-multiple').select2({
-                placeholder: "Select",
-                tags: true,
-                allowClear: true,
-                minimumInputLength: 2,
-
-                // tokenSeparators: [',', ' ']
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $('.select2-multiple').select2({
+                    ajax: {
+                        url: "{{ route('search.tags') }}",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: function(params) {
+                            return {
+                                tag: params.term // search term
+                            };
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data.message, function(tag) {
+                                    return {
+                                        text: tag.title,
+                                        id: tag.title
+                                    }
+                                })
+                            };
+                        },
+                        cache: true
+                    },
+                    placeholder: 'Search Tag',
+                    tags: true,
+                    minimumInputLength: 2,
+                    allowClear: true,
+                });
             });
-        });
+       
     </script>
 @endsection

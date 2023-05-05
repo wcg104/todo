@@ -37,9 +37,7 @@ class NoteController extends Controller
      */
     public function create()
     {
-        $tags = Tag::all();
-
-        return view('user.addnote', ['tags' => $tags]);
+        return view('user.addnote');
     }
 
     /**
@@ -104,10 +102,8 @@ class NoteController extends Controller
     public function edit($id)
     {
         $notes = Note::find($id);
-        $tags = Tag::all();
         $todos = Todo::where('user_id', Auth::user()->id)->where('note_id', $id)->get();
-
-        return view('user.editnote', ['notes' => $notes, 'tags' => $tags, 'todos' => $todos]);
+        return view('user.editnote', ['notes' => $notes, 'todos' => $todos]);
         // return response()->json($notes);
     }
 
@@ -120,7 +116,6 @@ class NoteController extends Controller
      */
     public function update(UpdateNoteRequest $request, $id)
     {
-        // dd($request->all());
 
         $tags = [];
         if ($request->tags) {

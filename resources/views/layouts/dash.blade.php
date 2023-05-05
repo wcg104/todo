@@ -112,7 +112,7 @@
             @endphp
 
 
-                
+
             {{-- new --}}
             {{-- 
             <li class="nav-item">
@@ -139,7 +139,7 @@
 
             {{-- old --}}
             <li class="nav-item">
-                <a class="nav-link collapsed"  href="#" data-toggle="collapse" data-target="#collapseUtilities"
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-tags"></i>
                     <span>Tag</span>
@@ -162,7 +162,9 @@
             {{-- return back admin  --}}
             @if (Session::get('hasClonedUser') == 1)
                 <li class="nav-item">
-                    <a class="nav-link collapsed" onclick="event.preventDefault(); document.getElementById('cloneuser-form').submit();"><i class="fa fa-step-backward" aria-hidden="true"></i><span>Return Back</span></a>
+                    <a class="nav-link collapsed"
+                        onclick="event.preventDefault(); document.getElementById('cloneuser-form').submit();"><i
+                            class="fa fa-step-backward" aria-hidden="true"></i><span>Return Back</span></a>
                     <form id="cloneuser-form" action="{{ url('users/loginas') }}" method="post">
                         {{ csrf_field() }}
                     </form>
@@ -243,15 +245,18 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span
                                     class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
-                                {{-- <img class="img-profile rounded-circle" src={{ asset('img/undraw_profile.svg')}}> --}}
-                                <img class="img-profile rounded-circle" src="/images/{{ Auth::user()->image }}">
+                                @if (Auth::user()->image)
+                                    <img class="img-profile rounded-circle" src="/images/{{ Auth::user()->image }}">
+                                @else
+                                    <img class="img-profile rounded-circle" src={{ asset('img/undraw_profile.svg') }}>
+                                @endif
 
-                                
+
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="{{route('update-profile')}}">
+                                <a class="dropdown-item" href="{{ route('update-profile') }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>

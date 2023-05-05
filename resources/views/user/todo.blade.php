@@ -4,7 +4,8 @@
 @endsection
 
 @section('head')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+        integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 @endsection
 
 
@@ -60,13 +61,13 @@
                                             <i class="fas fa-bars mr-3 ml-3 text-secondary changeOrder"></i>
 
                                             @if ($todo->status == 'pending')
-                                                <input class="form-check-input ml-5 mr-3 mt-0 checkbox" data-id={{ $todo->id }}
-                                                    type="checkbox" value="" id="flexCheckChecked2"
-                                                    aria-label="..." />
+                                                <input class="form-check-input ml-5 mr-3 mt-0 checkbox"
+                                                    data-id={{ $todo->id }} type="checkbox" value=""
+                                                    id="flexCheckChecked2" aria-label="..." />
                                             @else
-                                                <input class="form-check-input ml-5 mr-3 mt-0 checkbox" data-id={{ $todo->id }}
-                                                    type="checkbox" value="" id="flexCheckChecked2" aria-label="..."
-                                                    checked />
+                                                <input class="form-check-input ml-5 mr-3 mt-0 checkbox"
+                                                    data-id={{ $todo->id }} type="checkbox" value=""
+                                                    id="flexCheckChecked2" aria-label="..." checked />
                                             @endif
 
                                         </div>
@@ -179,8 +180,10 @@
         });
     </script>
 
-  
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
+    </script>
 
     <script type="text/javascript">
         // end table 
@@ -273,62 +276,33 @@
 
             $('.checkbox').change(function() {
                 if (this.checked) {
-                    // console.log("check");
-                    var id = $(this).data("id");
-                    var url = "{{ route('todo.done', ':id') }}";
-                    url = url.replace(':id', id);
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        success: function(res) {
-                            if (res.type == 'success') {
-                                Swal.fire({
-                                    // position: 'top-end',
-                                    icon: 'success',
-                                    height: 10,
-                                    width: 350,
-                                    title: res.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then(function() {
-                                    location.reload();
-                                });
-
-
-
-                            }
-                        }
-                    });
+                    var status = "completed";
                 } else {
-                    // console.log("uncheck");
-                    var id = $(this).data("id");
-                    var url = "{{ route('todo.pending', ':id') }}";
-                    url = url.replace(':id', id);
-                    $.ajax({
-                        url: url,
-                        type: 'GET',
-                        success: function(res) {
-                            if (res.type == 'success') {
-                                Swal.fire({
-                                    // position: 'top-end',
-                                    icon: 'success',
-                                    height: 10,
-                                    width: 350,
-                                    title: res.message,
-                                    showConfirmButton: false,
-                                    timer: 1500
-                                }).then(function() {
-                                    location.reload();
-                                });
-
-
-
-                            }
-                        }
-                    });
-
+                    var status = "pending";
                 }
-                // $('#textbox1').val(this.checked);
+                var id = $(this).data("id");
+                var url = "{{ route('todo.status', [':id', ':status']) }}";
+                url = url.replace(':id', id);
+                url = url.replace(':status', status);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function(res) {
+                        if (res.type == 'success') {
+                            Swal.fire({
+                                // position: 'top-end',
+                                icon: 'success',
+                                height: 10,
+                                width: 350,
+                                title: res.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            }).then(function() {
+                                location.reload();
+                            });
+                        }
+                    }
+                });
             });
 
         });

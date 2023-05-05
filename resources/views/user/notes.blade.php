@@ -162,8 +162,11 @@
 
         $(".archiveNote").click(function() {
             var id = $(this).data("id");
-            var url = "{{ route('notes.archive', ':id') }}";
+            var archive = 1 ;
+            var url = "{{ route('notes.archive', [':id',':archive']) }}";
             url = url.replace(':id', id);
+            url = url.replace(':archive', archive);
+
             $.ajax({
                 url: url,
                 type: 'get',
@@ -174,7 +177,7 @@
                             icon: 'success',
                             height: 10,
                             width: 350,
-                            title: res.message,
+                            title: 'Archive Note',
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function() {

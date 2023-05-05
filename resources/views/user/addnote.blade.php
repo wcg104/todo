@@ -49,10 +49,10 @@
                             <select class="select2-multiple form-control " name="tags[]" multiple="multiple"
                                 id="select2Multiple">
 
-
-                                @foreach ($tags as $tag)
+                                <option value=""></option>
+                                {{-- @foreach ($tags as $tag)
                                     <option value="{{ $tag->title }}">{{ $tag->title }}</option>
-                                @endforeach
+                                @endforeach --}}
 
                             </select>
 
@@ -62,8 +62,8 @@
                         <div id="myDIV" class="header">
                             <h2 class="d-inline">To Do List</h2>
                             <a href="javascript:void(0);" class="add_button ml-5" title="Add field"><i
-                                class="fa fa-plus ml-3 mb-3" style="font-size:20px;color:rgb(0, 255, 21)"
-                                aria-hidden="true"></i></a>
+                                    class="fa fa-plus ml-3 mb-3" style="font-size:20px;color:rgb(0, 255, 21)"
+                                    aria-hidden="true"></i></a>
 
                         </div>
                         {{-- @if ($errors->any())
@@ -157,7 +157,7 @@
                 if (x < maxField) {
                     x++; //Increment field counter
                     addInput(); //Add field html
-                    removeButton(); 
+                    removeButton();
 
                 }
             });
@@ -171,13 +171,6 @@
             });
         });
     </script>
-
-    {{-- validate --}}
-    {{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.0/jquery.validate.min.js"></script> --}}
-
-    {{-- <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script> --}}
 
     <script>
         $(document).ready(function() {
@@ -250,61 +243,39 @@
 
     <script>
         $(document).ready(function() {
-
-
-
-
-            // function matchText(params, data) {
-                
-            //     if ($.trim(params.term) === '') {
-            //         return null;
-            //     }
-
-            //     // Do not display the item if there is no 'text' property
-            //     if (typeof data.text === 'undefined') {
-            //         return null;
-            //     }
-
-            //     // `params.term` should be the term that is used for searching
-            //     // `data.text` is the text that is displayed for the data object
-            //     if (data.text.indexOf(params.term) > -1) {
-            //         var modifiedData = $.extend({}, data, true);
-            //         modifiedData.text += ' (matched)';
-
-            //         // You can return modified objects from here
-            //         // This includes matching the `children` how you want in nested data sets
-            //         return modifiedData;
-            //     }
-
-            //     // Return `null` if the term should not be displayed
-            //     return null;
-            // }
-
-
-            // Select2 Multiple
-            $('.select2-multiple').select2({
-                placeholder: "Select",
-                allowClear: true,
-                tags: true,
-                minimumInputLength: 2,
-                // matcher: matchText,
-                // tokenSeparators: [',', ' ']
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                });
+                $('.select2-multiple').select2({
+                    ajax: {
+                        url: "{{ route('search.tags') }}",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: function(params) {
+                            return {
+                                tag: params.term // search term
+                            };
+                        },
+                        processResults: function(data) {
+                            return {
+                                results: $.map(data.message, function(tag) {
+                                    return {
+                                        text: tag.title,
+                                        id: tag.title
+                                    }
+                                })
+                            };
+                        },
+                        cache: true
+                    },
+                    placeholder: 'Search Tag',
+                    tags: true,
+                    minimumInputLength: 2,
+                    allowClear: true,
+                });
             });
-
-
-            // $.get("http://127.0.0.1:8000/tags", {},
-            //     function(data, status) {
-            //         // console.log(data[0]);
-            //         data.forEach(element => select2Multiple.options[select2Multiple.options.length] =
-            //             new Option(element.title));
-
-            //         // for (const tag of data[0].title) {
-            //         //     select2Multiple.options[select2Multiple.options.length] = new Option(tag);
-            //         // }
-
-
-            //     });
-
-        });
+       
     </script>
 @endsection

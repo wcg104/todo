@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Redirect;
 use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
@@ -38,10 +40,13 @@ class GoogleController extends Controller
                 ]);
                 $saveUser = User::where('email', $user->getEmail())->first();
             }
-
-
+            // dd(User::find($saveUser->id)->active);
+            if (!User::find($saveUser->id)->active) {
+                Log::alert("Your account is not active. user id:$saveUser->id");
+                return back()->with('error' , 'Your account is not active.');
+            }
+            
             Auth::loginUsingId($saveUser->id);
-
             return redirect()->route('home');
         } catch (\Throwable $th) {
             throw $th;

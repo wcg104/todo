@@ -134,8 +134,6 @@
                 serverSide: true,
                 'iDisplayLength': 50,
                 stateSave: true,
-
-
                 ajax: "{{ route('users.index') }}",
                 columns: [{
                         data: 'DT_RowIndex',

@@ -15,7 +15,7 @@ class AddWalletToUsersTable extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             // $table->decimal('wallet', 8, 2)->default(10.00);
-            $table->string('image')->default('def.jpeg');
+            $table->string('image')->nullable();
         });
     }
 
