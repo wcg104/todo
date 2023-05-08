@@ -14,33 +14,6 @@
                     <h2 class="m-0 font-weight-bold text-primary text-center">Edit Profile</h2>
                 </div>
                 <div class="card-body">
-                    {{-- <form>
-                        <div class="form-group row">
-                            <label for="name" class="col-sm-2 col-form-label">Name</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="name" placeholder="Name">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="email" class="col-sm-2 col-form-label">Email</label>
-                            <div class="col-sm-10">
-                                <input type="email" class="form-control" id="email" placeholder="Email">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="number" class="col-sm-2 col-form-label">Number</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="number" placeholder="number">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-10">
-                                <button type="submit" class="btn btn-primary">Update</button>
-                            </div>
-                        </div>
-
-                    </form> --}}
-
                     <form method="POST" action="{{ route('update-profile-store') }}" enctype="multipart/form-data">
                         @csrf
 
@@ -125,28 +98,5 @@
 @endsection
 
 @section('script')
-    <script>
-        $(document).ready(function() {
-            $("#imageRe").click(function() {
-                $("#imageRemove").val("true");
-                $("#userImage").hide();
-            });
-
-            /* This function will call when onchange event fired */
-            $("#image").on("change", function() {
-                /* Current this object refer to input element */
-                $("#userImage").show();
-                $("#imageRemove").val("False");
-                var $input = $(this);
-                var reader = new FileReader();
-                reader.onload = function() {
-                    $("#userImage").attr("src", reader.result);
-                }
-                reader.readAsDataURL($input[0].files[0]);
-            });
-
-
-
-        });
-    </script>
+    <script src="{{ asset('/js/custom/user/profileedit.js') }}"></script>
 @endsection

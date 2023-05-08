@@ -18,6 +18,6 @@ class Tag extends Model
     public $timestamps = true;
     public function notes()
     {
-        return $this->belongsToMany(Note::class,'note_tags');
+        return $this->belongsToMany(Note::class,'note_tags')->where('archive',0);
     }
 }

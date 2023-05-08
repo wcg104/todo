@@ -66,8 +66,9 @@
                                                 class="fa fa-archive text-secondary" aria-hidden="true"></i></a> --}}
 
 
-                                        <a title="unarchive" data-id={{ $note->id }} class="unarchiveNote"><i
-                                                class="fa fa-archive text-secondary"></i></a>
+                                        <a title="unarchive" data-id={{ $note->id }}
+                                            data-action="{{ route('notes.archive', [$note->id, '0']) }}"
+                                            class="unarchiveNote"><i class="fa fa-archive text-secondary"></i></a>
                                     </td>
                             @endforeach
                         </tbody>
@@ -81,33 +82,5 @@
 @endsection
 
 @section('script')
-    <script>
-        $(".unarchiveNote").click(function() {
-            var id = $(this).data("id");
-            var archive = 0 ;
-            var url = "{{ route('notes.archive', [':id',':archive']) }}";
-            url = url.replace(':id', id);
-            url = url.replace(':archive', archive);
-
-            $.ajax({
-                url: url,
-                type: 'get',
-                success: function(res) {
-                    if (res.type == 'success') {
-                        Swal.fire({
-                            // position: 'top-end',
-                            icon: 'success',
-                            height: 10,
-                            width: 350,
-                            title: "Unarchive Note",
-                            showConfirmButton: false,
-                            timer: 1500
-                        }).then(function() {
-                            location.reload();
-                        });
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="{{ asset('/js/custom/user/archivenote.js') }}"></script>
 @endsection

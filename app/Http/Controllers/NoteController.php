@@ -35,7 +35,7 @@ class NoteController extends Controller
         if (request()->start_date || request()->end_date) {
             $start_date = Carbon::parse(request()->start_date)->toDateTimeString();
             $end_date = Carbon::parse(request()->end_date)->toDateTimeString();
-            $notes = Note::whereBetween('created_at', [$start_date, $end_date])->simplePaginate(15);
+            $notes = Note::whereBetween('created_at', [$start_date, $end_date])->where('archive',0)->simplePaginate(15);
         } else {
             $notes = User::with('note')->find(Auth::user()->id)->note()->simplePaginate(15);
         }

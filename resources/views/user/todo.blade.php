@@ -62,12 +62,16 @@
 
                                             @if ($todo->status == 'pending')
                                                 <input class="form-check-input ml-5 mr-3 mt-0 checkbox"
-                                                    data-id={{ $todo->id }} type="checkbox" value=""
-                                                    id="flexCheckChecked2" aria-label="..." />
+                                                    data-id="{{ $todo->id }}"
+                                                    data-action="{{ route('todo.status', [$todo->id, 'completed']) }}"
+                                                    type="checkbox" value="" id="flexCheckChecked2"
+                                                    aria-label="..." />
                                             @else
                                                 <input class="form-check-input ml-5 mr-3 mt-0 checkbox"
-                                                    data-id={{ $todo->id }} type="checkbox" value=""
-                                                    id="flexCheckChecked2" aria-label="..." checked />
+                                                    data-id="{{ $todo->id }}"
+                                                    data-action="{{ route('todo.status', [$todo->id, 'pending']) }}"
+                                                    type="checkbox" value="" id="flexCheckChecked2" aria-label="..."
+                                                    checked />
                                             @endif
 
                                         </div>
@@ -134,8 +138,9 @@
 
 
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button type="submit" class="btn btn-primary" data-id={{ $todo->id }} id="saveBtn"
-                                value="create">Save changes
+                            <button type="submit" class="btn btn-primary" data-id="{{ $todo->id }}"
+                                data-action="{{ route('todos.update', $todo->id) }}" id="saveBtn" value="create">Save
+                                changes
                             </button>
                         </div>
                     </form>
@@ -147,225 +152,16 @@
 
 
     {{-- end pop edit --}}
-    {{-- {{ $notes->links() }} --}}
 @endsection
 
 @section('script')
-    <script>
-        $(document).ready(function() {
-
-            // $('.Print-table').click(function() {
-            //     window.print();
-            // });
-
-            //table to pdf 
-
-            $('.Print-table').click(function() {
-                // Get the table HTML
-                var table = $('#myTable');
-                var html = table.outerHTML;
-
-                // Create a new jsPDF instance
-                var doc = new jsPDF();
-
-                // Add the table to the PDF document
-                doc.autoTable({
-                    html: html
-                });
-
-                // Download the PDF document
-                doc.save('table.pdf');
-            });
-
-        });
-    </script>
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
-    </script>
-
-    <script type="text/javascript">
-        // end table 
-
-
-        $(function() {
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-
-            $('body').on('click', '.edittodo', function() {
-
-                var todo_id = $(this).data('id');
-
-
-                $.get("" + '/todos/' + todo_id + '/edit', function(
-                    data) {
-                    $('#modelHeading').html("Edit Todo");
-                    $('#saveBtn').val("edit-user");
-                    $('#ajaxModel').modal('show');
-                    $('#todo_id').val(data.id);
-                    $('#name').val(data.title);
-
-                })
-            });
-
-            $("#saveBtn").click(function(e) {
-                var id = $(this).data("id");
-                console.log(id);
-                var url = "{{ route('todos.update', ':id') }}";
-                url = url.replace(':id', id);
-                // var token = $("meta[name='csrf-token']").attr("content");
-                e.preventDefault();
-                $(this).html('Sending..');
-                $.ajax({
-                    url: url,
-                    type: 'PUT',
-                    data: $('#productForm').serialize(),
-                    dataType: 'json',
-                    success: function(data) {
-
-                        $('#productForm').trigger("reset");
-                        $('#ajaxModel').modal('hide');
-                        location.reload();
-                        // table.draw();
-
-                    },
-                    error: function(data) {
-                        console.log('Error:', data);
-                        $('#saveBtn').html('Save Changes');
-                    }
-                    // location.reload();
-                });
-            });
-
-
-            $(".deleteTodo").click(function() {
-                var id = $(this).data("id");
-                var url = $(this).data("action");
-                // url = url.replace(':id', id);
-                $.ajax({
-                    url: url,
-                    type: 'DELETE',
-                    success: function(res) {
-                        if (res.type == 'success') {
-                            Swal.fire({
-                                // position: 'top-end',
-                                icon: 'success',
-                                height: 10,
-                                width: 350,
-                                title: res.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function() {
-                                location.reload();
-                            });
-
-
-
-                        }
-                    }
-                });
-            });
-
-
-            // check box task 
-
-            $('.checkbox').change(function() {
-                if (this.checked) {
-                    var status = "completed";
-                } else {
-                    var status = "pending";
-                }
-                var id = $(this).data("id");
-                var url = "{{ route('todo.status', [':id', ':status']) }}";
-                url = url.replace(':id', id);
-                url = url.replace(':status', status);
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function(res) {
-                        if (res.type == 'success') {
-                            Swal.fire({
-                                // position: 'top-end',
-                                icon: 'success',
-                                height: 10,
-                                width: 350,
-                                title: res.message,
-                                showConfirmButton: false,
-                                timer: 1500
-                            }).then(function() {
-                                location.reload();
-                            });
-                        }
-                    }
-                });
-            });
-
-        });
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
     </script>
 
     {{-- re order todos --}}
     <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-
-    <!-- Datatables Js-->
-    {{-- <script type="text/javascript" src="//cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script> --}}
-
-    <script type="text/javascript">
-        $(function() {
-            // $("#myTable").DataTable();
-
-            $("#tablecontents").sortable({
-                // items: "tr",
-                handle: '.changeOrder',
-                cursor: 'move',
-                opacity: 0.6,
-                update: function() {
-                    sendOrderToServer();
-                }
-            });
-
-            function sendOrderToServer() {
-
-                var order = [];
-                $('tr.row1').each(function(index, element) {
-                    order.push({
-                        id: $(this).attr('data-id'),
-                        position: index + 1
-                    });
-                });
-
-                $.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: "{{ route('todos.reorder') }}",
-                    data: {
-                        order: order,
-                        _token: '{{ csrf_token() }}'
-                    },
-                    success: function(res) {
-                        if (res.type == 'success') {
-
-                            // Swal.fire({
-                            //     // position: 'top-end',
-                            //     icon: 'success',
-                            //     // height: 10,
-                            //     width: 350,
-                            //     title: res.message,
-                            //     showConfirmButton: false,
-                            //     timer: 1500
-                            // })
-
-
-
-                        }
-                    }
-                });
-
-            }
-        });
+    <script>
+        var ChangeOrderRoute = "{{ route('todos.reorder') }}";
     </script>
+    <script src="{{asset('/js/custom/user/todo.js')}}"></script>
 @endsection
