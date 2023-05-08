@@ -34,10 +34,10 @@ class AdminController extends Controller
             return DataTables::of($user)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" class="editUser" title="Edit"> <i data-id="{{ $user->id }}" class="fas fa-pencil-alt mr-3 text-secondary editProduct" aria-hidden="true"></i></a>';
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-action="'.route('users.edit', $row->id ).'" class="editUser" title="Edit"> <i data-id="{{ $user->id }}" class="fas fa-pencil-alt mr-3 text-secondary editProduct" aria-hidden="true"></i></a>';
                     $btn = $btn . '<a href="javascript:void(0)" data-id="' . $row->id . '" class="unblockUser" title="active"> <i class="fas fa-check text-success me-3 mr-3"></i></a>';
                     $btn = $btn . '<a href="javascript:void(0)" data-id="' . $row->id . '" class="blockUser" title="ban"> <i class="fa fa-ban mr-3 text-danger" aria-hidden="true"></i>';
-                    $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" class="deleteUser"  data-id="' . $row->id . '" title="Delete"> <i class="fas fa-trash-alt text-danger mr-3" aria-hidden="true"></i></a>';
+                    $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" class="deleteUser"  data-id="' . $row->id . '" data-action="'.route('users.destroy', $row->id ).'" title="Delete"> <i class="fas fa-trash-alt text-danger mr-3" aria-hidden="true"></i></a>';
                     $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" class="loginAs"  data-id="' . $row->id . '" title="Login as"> <i class="fa fa-sign-in-alt text-secondary mr-3" aria-hidden="true"></i></a>';
 
                     return $btn;
