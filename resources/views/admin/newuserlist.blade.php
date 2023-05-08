@@ -117,7 +117,7 @@
 @endsection
 
 @section('script')
-    <script src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
     <script>
         var indexDataRoute = "{{ route('users.index') }}";
     </script>
