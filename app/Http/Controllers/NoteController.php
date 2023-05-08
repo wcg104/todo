@@ -12,7 +12,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use Yajra\DataTables\Facades\DataTables;
+
 
 class NoteController extends Controller
 {
@@ -27,17 +27,26 @@ class NoteController extends Controller
     }
     public function index(Request $request)
     {
-        // old no ajax
-        // $notes = User::with('note')->find(Auth::user()->id)->note()->simplePaginate(15);
-        // return view('user.notes', ['notes' => $notes]);
 
-        // new with ajax
         if (request()->start_date || request()->end_date) {
             $start_date = Carbon::parse(request()->start_date)->toDateTimeString();
             $end_date = Carbon::parse(request()->end_date)->toDateTimeString();
-            $notes = Note::whereBetween('created_at', [$start_date, $end_date])->where('archive',0)->simplePaginate(15);
+            $notes = Note::whereBetween('created_at', [$start_date, $end_date])->where('archive', 0)->simplePaginate(10);
+        } elseif (request()->search) {
+            $q = request()->search;
+            $notes = Note::where('title', 'LIKE', '%' . $q . '%')->where('archive', 0)->simplePaginate(15);
+        } elseif ($request->ajax()) {
+            $sort_by = $request->get('sortby');
+            $sort_type = $request->get('sorttype');
+            $query = $request->get('query');
+            $query = str_replace(" ", "%", $query);
+            $notes = Note::where('id', 'like', '%' . $query . '%')
+                ->orWhere('title', 'like', '%' . $query . '%')
+                ->orderBy($sort_by, $sort_type)
+                ->simplePaginate(10);
+            return view('user.notebody', compact('notes'))->render();
         } else {
-            $notes = User::with('note')->find(Auth::user()->id)->note()->simplePaginate(15);
+            $notes = User::with('note')->find(Auth::user()->id)->note()->simplePaginate(10);
         }
         return view('user.notes', ['notes' => $notes]);
     }

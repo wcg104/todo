@@ -26,6 +26,19 @@
 
                 <div class="card-body">
                     <div class="row">
+                        {{-- <form action="{{route('notes.index')}}" class="col-3" method="GET">
+                            <div class="input-group mb-3">
+                                <input type="date" class="form-control" name="start_date">
+                                <input type="date" class="form-control" name="end_date">
+                                <button class="btn btn-primary" type="submit">GET</button>
+                            </div>
+                        </form>
+                        <form action="{{route('notes.index')}}" class="col-3" method="GET">
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" name="search">
+                                <button class="btn btn-primary" type="submit">Search</button>
+                            </div>
+                        </form> --}}
                         <form action="{{route('notes.index')}}" class="col-3" method="GET">
                             <div class="input-group mb-3">
                                 <input type="date" class="form-control" name="start_date">
@@ -33,14 +46,18 @@
                                 <button class="btn btn-primary" type="submit">GET</button>
                             </div>
                         </form>
+                        <div class="form-group">
+                            <input type="text" name="serach" id="serach" class="form-control" placeholder="serach"/>
+                        </div>
+
                     </div>
                     <table class="table mb-0">
                         <thead>
                             <tr>
                                 <th scope="col-1">No</th>
-                                <th scope="col-5">Title</th>
+                                <th scope="col-5" class="sorting" data-sorting_type="asc" data-column_name="title" style="cursor: pointer">Title <span id="title"></span></th>
                                 <th scope="col-1">Priority</th>
-                                <th scope="col-1">Created Date</th>
+                                <th scope="col-1" class="sorting" data-sorting_type="asc" data-column_name="created_at" style="cursor: pointer">Created Date <span id="created_at"></span></th>
                                 <th scope="col-2">Tags</th>
                                 <th scope="col-1">Status</th>
                                 <th scope="col-1">Actions</th>
@@ -48,13 +65,12 @@
                         </thead>
 
                         <tbody id="tbody">
-                            @foreach ($notes as $key => $note)
+                            @include('user.notebody')
+                            {{-- @foreach ($notes as $key => $note)
                                 <tr class="fw-normal">
-                                    {{-- <th class="align-middle">{{++$index}}</th> --}}
-                                    {{-- <td>{{ $loop->index+1+((($notes->currentPage())-1)*15)}}</td> --}}
+                               
 
                                     <td class="align-middle">
-                                        {{-- {{ ++$key }} --}}
                                         {{ ($notes->currentpage() - 1) * $notes->perpage() + $key + 1 }}
                                     </td>
 
@@ -89,8 +105,6 @@
                                     </td>
 
                                     <td class="align-middle">
-                                        {{-- <a href="{{ route('notes.done', ['id' => $note->id]) }}" data-mdb-toggle="tooltip" title="Done"><i
-                                                class="fas fa-check text-success me-3 mr-3"></i></a> --}}
                                         <a class="noteDone" data-id={{ $note->id }} data-action="{{route('notes.done', $note->id)}}" title="Done"><i
                                                 class="fas fa-check text-success me-3 mr-3"></i></a>
 
@@ -104,18 +118,19 @@
                                         <a href="{{ route('notes.show', ['note' => $note->id]) }}" data-mdb-toggle="tooltip"
                                             title="view"><i class="fa fa-eye mr-3" aria-hidden="true"></i></a>
 
-                                        {{-- <a href="{{ route('notes.archive', ['id' => $note->id])}}" data-mdb-toggle="tooltip"
-                                            title="archive"><i class="fa fa-archive text-secondary" aria-hidden="true"></i></a> --}}
-
                                         <a title="archive" data-id={{ $note->id }} data-action="{{ route('notes.archive', [$note->id,'1']) }}" class="archiveNote"><i
                                                 class="fa fa-archive text-secondary"></i></a>
                                     </td>
-                            @endforeach
+                            @endforeach --}}
                         </tbody>
                     </table>
+
+                    <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
+                    <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
+                    <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="asc" />
                     <div class="m-2">
 
-                        {{ $notes->links() }}
+                        {{-- {{ $notes->links() }} --}}
                     </div>
                 </div>
             </div>
@@ -127,4 +142,5 @@
 
 @section('script')
     <script src="{{ asset('/js/custom/user/notes.js') }}"></script>
+    
 @endsection
