@@ -8,10 +8,11 @@ use App\Models\Note;
 use App\Models\Tag;
 use App\Models\Todo;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
-
+use Illuminate\Support\Facades\Log;
+use Yajra\DataTables\Facades\DataTables;
 
 class NoteController extends Controller
 {
@@ -24,9 +25,20 @@ class NoteController extends Controller
     {
         $this->middleware('auth');
     }
-    public function index()
+    public function index(Request $request)
     {
-        $notes = User::with('note')->find(Auth::user()->id)->note()->simplePaginate(15);
+        // old no ajax
+        // $notes = User::with('note')->find(Auth::user()->id)->note()->simplePaginate(15);
+        // return view('user.notes', ['notes' => $notes]);
+
+        // new with ajax
+        if (request()->start_date || request()->end_date) {
+            $start_date = Carbon::parse(request()->start_date)->toDateTimeString();
+            $end_date = Carbon::parse(request()->end_date)->toDateTimeString();
+            $notes = Note::whereBetween('created_at', [$start_date, $end_date])->simplePaginate(15);
+        } else {
+            $notes = User::with('note')->find(Auth::user()->id)->note()->simplePaginate(15);
+        }
         return view('user.notes', ['notes' => $notes]);
     }
 
@@ -67,7 +79,7 @@ class NoteController extends Controller
         $notes->save();
         $notes->tags()->attach($tags);
 
-        
+
         foreach ($request->todo_list as $key => $value) {
             Todo::create([
                 'user_id' => Auth::user()->id,
@@ -152,7 +164,7 @@ class NoteController extends Controller
 
             // delete old todo
             $oldTodoId = Todo::where('note_id', $id)->pluck('id');
-            
+
             foreach ($oldTodoId as $key => $value) {
                 if (!in_array($value, $oldTodo)) {
                     Todo::find($value)->delete();
@@ -188,7 +200,6 @@ class NoteController extends Controller
         $notes = Note::find($id);
         $notes->tags()->detach();
         $notes->delete();
-        Todo::where('note_id', $id)->delete();
         return response()->json(['type' => 'success', 'message' => 'Note Deleted successfully!']);
     }
 }

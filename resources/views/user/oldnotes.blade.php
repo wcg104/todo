@@ -24,16 +24,8 @@
                 </div>
 
 
+
                 <div class="card-body">
-                    <div class="row">
-                        <form action="{{route('notes.index')}}" class="col-3" method="GET">
-                            <div class="input-group mb-3">
-                                <input type="date" class="form-control" name="start_date">
-                                <input type="date" class="form-control" name="end_date">
-                                <button class="btn btn-primary" type="submit">GET</button>
-                            </div>
-                        </form>
-                    </div>
                     <table class="table mb-0">
                         <thead>
                             <tr>
@@ -47,7 +39,7 @@
                             </tr>
                         </thead>
 
-                        <tbody id="tbody">
+                        <tbody>
                             @foreach ($notes as $key => $note)
                                 <tr class="fw-normal">
                                     {{-- <th class="align-middle">{{++$index}}</th> --}}
@@ -156,9 +148,7 @@
                                     'Your file has been deleted.',
                                     'success'
                                 ).then(function() {
-                                    // location.reload();
-                                    // $('#tbody').load(document.URL +  ' #tbody');
-                                    $('.table').load(document.URL +  ' .table');
+                                    location.reload();
                                 });
 
                             }
@@ -223,9 +213,7 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function() {
-                            // location.reload();
-                            $('.table').load(document.URL +  ' .table');
-
+                            location.reload();
                         });
 
 

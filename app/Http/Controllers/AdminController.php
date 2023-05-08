@@ -144,11 +144,7 @@ class AdminController extends Controller
      */
     public function destroy($id)
     {
-        //
         User::find($id)->delete();
-        Note::where('user_id', $id)->delete();
-        Todo::where('user_id', $id)->delete();
-
         return response()->json(['type' => 'success', 'message' => 'User Data Deleted successfully!']);
     }
 }
