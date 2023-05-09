@@ -195,7 +195,7 @@ class NoteController extends Controller
     }
 
     /**
-     * delete note and note todos.
+     * delete note and note todos. 
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
