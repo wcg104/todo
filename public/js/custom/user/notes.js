@@ -120,7 +120,8 @@ $(document).ready(function() {
         var query = $('#serach').val();
         var column_name = $('#hidden_column_name').val();
         var sort_type = $('#hidden_sort_type').val();
-        var page = $('#hidden_page').val();
+        // var page = $('#hidden_page').val();
+        var page = 1;
         fetch_data(page, sort_type, column_name, query);
     });
 
@@ -138,7 +139,7 @@ $(document).ready(function() {
         if (order_type == 'desc') {
             $(this).data('sorting_type', 'asc');
             reverse_order = 'asc';
-            clear_icon
+            clear_icon();
             $('#' + column_name + '_icon').html(
                 '<span class="glyphicon glyphicon-triangle-top"></span>');
         }
@@ -149,16 +150,16 @@ $(document).ready(function() {
         fetch_data(page, reverse_order, column_name, query);
     });
 
-    $(document).on('click', '.pagination a', function(event) {
-        event.preventDefault();
-        var page = $(this).attr('href').split('page=')[1];
-        $('#hidden_page').val(page);
-        var column_name = $('#hidden_column_name').val();
-        var sort_type = $('#hidden_sort_type').val();
-        var query = $('#serach').val();
-        $('li').removeClass('active');
-        $(this).parent().addClass('active');
-        fetch_data(page, sort_type, column_name, query);
-    });
+    // $(document).on('click', '.paginet a', function(event) {
+    //     event.preventDefault();
+    //     var page = $(this).attr('href').split('page=')[1];
+    //     $('#hidden_page').val(page);
+    //     var column_name = $('#hidden_column_name').val();
+    //     var sort_type = $('#hidden_sort_type').val();
+    //     var query = $('#serach').val();
+    //     // $('li').removeClass('active');
+    //     // $(this).parent().addClass('active');
+    //     fetch_data(page, sort_type, column_name, query);
+    // });
 
 });

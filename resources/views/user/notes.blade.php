@@ -141,6 +141,6 @@
 @endsection
 
 @section('script')
-    <script src="{{ asset('/js/custom/user/notes.js') }}"></script>
+    <script  src="{{ asset('/js/custom/user/notes.js') }}"></script>
     
 @endsection

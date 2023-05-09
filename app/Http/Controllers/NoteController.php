@@ -32,9 +32,6 @@ class NoteController extends Controller
             $start_date = Carbon::parse(request()->start_date)->toDateTimeString();
             $end_date = Carbon::parse(request()->end_date)->toDateTimeString();
             $notes = Note::whereBetween('created_at', [$start_date, $end_date])->where('archive', 0)->simplePaginate(10);
-        } elseif (request()->search) {
-            $q = request()->search;
-            $notes = Note::where('title', 'LIKE', '%' . $q . '%')->where('archive', 0)->simplePaginate(15);
         } elseif ($request->ajax()) {
             $sort_by = $request->get('sortby');
             $sort_type = $request->get('sorttype');

@@ -56,7 +56,7 @@
 @endforeach
 
 <tr class="">
-    <td class="col-2">
+    <td class="col-2 paginet">
         {{ $notes->links() }}
     </td>
 </tr>
