@@ -33,7 +33,7 @@
                         </form>
 
 
-                        <a class="btn btn-primary col-1" href="{{ route('note.pdf', ['id' => $note]) }}"> Export to PDF </a>
+                        <a class="btn btn-primary" href="{{ route('note.pdf', ['id' => $note]) }}"> Export to PDF </a>
                         {{-- <a class="btn btn-primary col-1 Print-table"> Export to PDF </a> --}}
 
 
