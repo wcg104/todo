@@ -12,11 +12,13 @@ use Laravel\Socialite\Facades\Socialite;
 
 class GoogleController extends Controller
 {
+    // redirect google login page an show user login account list 
     public function loginWithGoogle()
     {
         return Socialite::driver('google')->redirect();
     }
 
+    // google return user all basic information 
     public function callbackFromGoogle()
     {
         try {
@@ -40,7 +42,7 @@ class GoogleController extends Controller
                 ]);
                 $saveUser = User::where('email', $user->getEmail())->first();
             }
-            // dd(User::find($saveUser->id)->active);
+           
             if (!User::find($saveUser->id)->active) {
                 Log::alert("Your account is not active. user id:$saveUser->id");
                 return back()->with('error' , 'Your account is not active.');

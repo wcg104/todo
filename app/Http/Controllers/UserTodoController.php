@@ -4,10 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Note;
 use App\Models\Todo;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
+
 
 class UserTodoController extends Controller
 {
@@ -20,7 +19,12 @@ class UserTodoController extends Controller
     {
         $this->middleware('auth');
     }
-    public function index($id, Request $request)
+
+    /**
+     * Notes Todo view 
+     * return note all todo
+     */
+    public function index($id)
     {
 
         if (Note::find($id)->user_id == Auth::user()->id) {
@@ -28,7 +32,6 @@ class UserTodoController extends Controller
         } else {
             return redirect(Route('user.dash'));
         }
-
     }
 
     /**
@@ -42,7 +45,7 @@ class UserTodoController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store new todos.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -102,7 +105,7 @@ class UserTodoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove todos.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -113,7 +116,7 @@ class UserTodoController extends Controller
         return response()->json(['type' => 'success', 'message' => 'Todo Deleted successfully!']);
     }
 
-    // change todo order 
+    // change todo order using drag and drop
     public function reorder(Request $request)
     {
         $todos = Todo::all();
@@ -123,8 +126,7 @@ class UserTodoController extends Controller
                     $todo->update(['index_no' => $order['position']]);
                 }
             }
-        }       
+        }
         return response()->json(['type' => 'success', 'message' => 'Todo Order Updated !']);
-
     }
 }

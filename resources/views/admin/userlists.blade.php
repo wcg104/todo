@@ -68,9 +68,9 @@
                                                 class="fas fa-pencil-alt mr-3 text-secondary editProduct"
                                                 aria-hidden="true"></i></a>
 
-                                        <a href="{{ route('admin.unban', ['id' => $user->id]) }}" data-mdb-toggle="tooltip"
+                                        <a href="{{ route('user.status', ['id' => $user->id,'status'=>1]) }}" data-mdb-toggle="tooltip"
                                             title="active"><i class="fas fa-check text-success me-3 mr-3"></i></a>
-                                        <a href="{{ route('admin.ban', ['id' => $user->id]) }}" data-mdb-toggle="tooltip"
+                                        <a href="{{ route('user.status', ['id' => $user->id,'status'=>0]) }}" data-mdb-toggle="tooltip"
                                             title="Ban"><i class="fa fa-ban mr-3 text-danger" aria-hidden="true"></i></a>
 
 

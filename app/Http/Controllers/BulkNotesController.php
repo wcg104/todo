@@ -8,17 +8,34 @@ use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
-use App\Rules\Csv;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class BulkNotesController extends Controller
 {
+    // upload csv file home page
     public function index()
     {
         return view('user.bulk');
     }
 
+    /**
+     * Take csv file as a input and insert record in database.
+     * User can upload one csv file to given format.
+     * if user not follow given format the show error "invalided format"
+     * if format is right then data upload to database and return total row , uploaded row and invalided row.
+     * file formate
+     * 
+     * col A: Note_title (type->string) Required
+     * col B: Note_uid (type->string|space not allow|unica foe all different notes) Required
+     * col C: priority_level (type->number|min-1,max-3 | default 3) 1 is high , 2 is medium , 3 is low
+     * col D: Tag (type->string) comma sprat value Optional
+     * col E: Todo_Title (type->string) required
+     * col F: File (type->url) Optional
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function dataStore(Request $request)
     {
         // dd($request->all());
@@ -79,6 +96,7 @@ class BulkNotesController extends Controller
                             }
                         }
                     }
+                    // create new todo 
                     $todos = new Todo;
                     $todos->note_id = Note::where('uid', $row[1])->first()->id;
                     $todos->user_id = Auth::user()->id;
@@ -87,6 +105,7 @@ class BulkNotesController extends Controller
                     // file move 
                     $image_name = null;
                     if ($row[5]) {
+                        // if file is exits then download and move to todoImage Folder
                         $image = @file_get_contents("$row[5]");
                         if ($image) {
                             Log::info(getimagesize($row[5]));
@@ -103,14 +122,12 @@ class BulkNotesController extends Controller
              
             }
         }
-        // dd( $validRows);
         $TotalRows = count($csvData);
         $ValidRows = count($validRows);
         $InvalidRows = count($errors);
-        // dd($errors);
         return response()->json(['type' => 'success', 'message' => 'file updated successfully','TotalRows'=>$TotalRows,'ValidRows'=>$ValidRows,'InvalidRows'=>$InvalidRows]);
 
-        // return view('user.bulkreport',['TotalRows'=>$TotalRows,'ValidRows'=>$ValidRows,'InvalidRows'=>$InvalidRows])->with('success', 'file updated successfully.');
+      
 
     }
 }

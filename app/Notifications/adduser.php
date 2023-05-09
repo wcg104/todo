@@ -43,7 +43,7 @@ class adduser extends Notification
         return (new MailMessage)
                     ->line('welcome mail.')
                     ->line("Your Email is. : $notifiable->email")
-                    ->line("Your Password is.:$notifiable->newpass")
+                    ->line("Your Password is.:$notifiable->newPassword")
                     ->action('Login Now', url('http://127.0.0.1:8000/'))
                     ->line('Thank you for using our application!');
     }

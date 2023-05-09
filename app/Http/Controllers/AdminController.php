@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Note;
-use App\Models\Todo;
 use App\Models\User;
 use App\Notifications\adduser;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -27,16 +24,16 @@ class AdminController extends Controller
     {
         // return view('admin.userlists', ['userlist' => User::simplePaginate(15)]);
 
-
+        // get all user list in admin dash
         if ($request->ajax()) {
             $user = User::where('role','user')->get();
-            
+            // pass all user data to DataTables and add action button edit,delete,block,unblock 
             return DataTables::of($user)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-action="'.route('users.edit', $row->id ).'" class="editUser" title="Edit"> <i data-id="{{ $user->id }}" class="fas fa-pencil-alt mr-3 text-secondary editProduct" aria-hidden="true"></i></a>';
-                    $btn = $btn . '<a href="javascript:void(0)" data-id="' . $row->id . '" class="unblockUser" title="active"> <i class="fas fa-check text-success me-3 mr-3"></i></a>';
-                    $btn = $btn . '<a href="javascript:void(0)" data-id="' . $row->id . '" class="blockUser" title="ban"> <i class="fa fa-ban mr-3 text-danger" aria-hidden="true"></i>';
+                    $btn = $btn . '<a href="javascript:void(0)" data-id="' . $row->id . '" data-action="'.route('user.status',[$row->id,1]  ).'" class="unblockUser" title="active"> <i class="fas fa-check text-success me-3 mr-3"></i></a>';
+                    $btn = $btn . '<a href="javascript:void(0)" data-id="' . $row->id . '" data-action="'.route('user.status',[$row->id,0]  ).'" class="blockUser" title="ban"> <i class="fa fa-ban mr-3 text-danger" aria-hidden="true"></i>';
                     $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" class="deleteUser"  data-id="' . $row->id . '" data-action="'.route('users.destroy', $row->id ).'" title="Delete"> <i class="fas fa-trash-alt text-danger mr-3" aria-hidden="true"></i></a>';
                     $btn = $btn . '<a href="javascript:void(0)" data-toggle="tooltip" class="loginAs"  data-id="' . $row->id . '" title="Login as"> <i class="fa fa-sign-in-alt text-secondary mr-3" aria-hidden="true"></i></a>';
 
@@ -61,7 +58,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created User data and updated user data.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -93,10 +90,9 @@ class AdminController extends Controller
                 'password' => Hash::make($request->password),
                 'email_verified_at'=>now()
             ]);
-            $user->newpass = $request->password;
-            // send mail
-            // $user->notify(new adduser("New User Created "));
-
+            $user->newPassword = $request->password;
+            // send mail with user email password and login url
+            $user->notify(new adduser("New User Created "));
             return response()->json(['type' => 'success', 'message' => 'New User Created successfully!']);
         }
     }
@@ -137,7 +133,8 @@ class AdminController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove User account With all user data.
+     * Soft Delete.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

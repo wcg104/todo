@@ -39,7 +39,7 @@
                                 <button class="btn btn-primary" type="submit">Search</button>
                             </div>
                         </form> --}}
-                        <form action="{{route('notes.index')}}" class="col-3" method="GET">
+                        <form action="{{ route('notes.index') }}" class="col-3" method="GET">
                             <div class="input-group mb-3">
                                 <input type="date" class="form-control" name="start_date">
                                 <input type="date" class="form-control" name="end_date">
@@ -47,7 +47,7 @@
                             </div>
                         </form>
                         <div class="form-group">
-                            <input type="text" name="serach" id="serach" class="form-control" placeholder="serach"/>
+                            <input type="text" name="serach" id="serach" class="form-control" placeholder="serach" />
                         </div>
 
                     </div>
@@ -55,9 +55,11 @@
                         <thead>
                             <tr>
                                 <th scope="col-1">No</th>
-                                <th scope="col-5" class="sorting" data-sorting_type="asc" data-column_name="title" style="cursor: pointer">Title <span id="title"></span></th>
+                                <th scope="col-5" class="sorting" data-sorting_type="asc" data-column_name="title"
+                                    style="cursor: pointer">Title <span id="title"></span></th>
                                 <th scope="col-1">Priority</th>
-                                <th scope="col-1" class="sorting" data-sorting_type="asc" data-column_name="created_at" style="cursor: pointer">Created Date <span id="created_at"></span></th>
+                                <th scope="col-1" class="sorting" data-sorting_type="asc" data-column_name="created_at"
+                                    style="cursor: pointer">Created Date <span id="created_at"></span></th>
                                 <th scope="col-2">Tags</th>
                                 <th scope="col-1">Status</th>
                                 <th scope="col-1">Actions</th>
@@ -124,7 +126,6 @@
                             @endforeach --}}
                         </tbody>
                     </table>
-
                     <input type="hidden" name="hidden_page" id="hidden_page" value="1" />
                     <input type="hidden" name="hidden_column_name" id="hidden_column_name" value="id" />
                     <input type="hidden" name="hidden_sort_type" id="hidden_sort_type" value="asc" />
@@ -140,7 +141,9 @@
     {{-- Delete Note  --}}
 @endsection
 
+
 @section('script')
-    <script  src="{{ asset('/js/custom/user/notes.js') }}"></script>
-    
+    <div class="scriptLoad">
+        <script src="{{ asset('/js/custom/user/notes.js') }}"></script>
+    </div>
 @endsection

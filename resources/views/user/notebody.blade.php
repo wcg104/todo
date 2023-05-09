@@ -56,7 +56,8 @@
 @endforeach
 
 <tr class="">
-    <td class="col-2 paginet">
+    <td class="paginet" colspan="3">
         {{ $notes->links() }}
     </td>
 </tr>
+{{-- <script src="{{ asset('/js/custom/user/notes.js') }}"></script> --}}

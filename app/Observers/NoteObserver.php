@@ -66,6 +66,8 @@ class NoteObserver
     public function Deleting(Note $note)
     {
         Log::info($note);
+        $notes = Note::find($note->id);
+        $notes->tags()->detach();
         Todo::where('note_id', $note->id)->delete();
       
     }

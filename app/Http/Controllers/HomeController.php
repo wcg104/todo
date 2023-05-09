@@ -29,11 +29,14 @@ class HomeController extends Controller
     {
         return view('home');
     }
+
+    // Show the change password dashboard dashboard
     public function changePassword()
     {
         return view('auth.change-password');
     }
 
+    // update user password to new password 
     public function updatePassword(Request $request)
     {
         # Validation
@@ -56,17 +59,19 @@ class HomeController extends Controller
 
         return back()->with("status", "Password changed successfully!");
     }
-
+    // Show Update user Profile  dashboard
     public function updateProfile()
     {
         $user = Auth::user();
-        // dd($user);
         return view('user.profileedit',['user'=>$user]);
     }
 
+    /**
+     * update user profile to new user information
+     * update user name , email, number , profile images 
+     */
     public function updateProfileStore(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'image' => 'image',
             'name' =>'required',
@@ -101,7 +106,7 @@ class HomeController extends Controller
         
     }
 
-    // get tags 
+    // get all tags list  
     public function getTags(Request $request)
     {
         $tags = Tag::where('title', 'LIKE', ''.$request->tag.'%') ->get();

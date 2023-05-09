@@ -11,7 +11,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
+
 
 
 class NoteController extends Controller
@@ -25,22 +25,26 @@ class NoteController extends Controller
     {
         $this->middleware('auth');
     }
+
+    /**
+     * Return user note list 
+     * allow to filter note with start_date to End_date
+     * allow user to search notes
+     */
     public function index(Request $request)
     {
-
+        // if request has start_date  or end_date and return data
         if (request()->start_date || request()->end_date) {
             $start_date = Carbon::parse(request()->start_date)->toDateTimeString();
             $end_date = Carbon::parse(request()->end_date)->toDateTimeString();
             $notes = Note::whereBetween('created_at', [$start_date, $end_date])->where('archive', 0)->simplePaginate(10);
-        } elseif ($request->ajax()) {
-            $sort_by = $request->get('sortby');
-            $sort_type = $request->get('sorttype');
+        }
+        // user can search note then search in title and return match data
+        elseif ($request->ajax()) {
             $query = $request->get('query');
             $query = str_replace(" ", "%", $query);
-            $notes = Note::where('id', 'like', '%' . $query . '%')
-                ->orWhere('title', 'like', '%' . $query . '%')
-                ->orderBy($sort_by, $sort_type)
-                ->simplePaginate(10);
+            $notes = User::find(Auth::user()->id)->note();
+            $notes = $notes->where('title', 'like', '%' . $query . '%')->simplePaginate(10);
             return view('user.notebody', compact('notes'))->render();
         } else {
             $notes = User::with('note')->find(Auth::user()->id)->note()->simplePaginate(10);
@@ -59,17 +63,15 @@ class NoteController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * Store a newly created Note .
+     * take input note title , priority_level , tags , todos 
+     * 
      */
-
-
     public function store(StoreNoteRequest $request)
     {
 
         $tags = [];
+        // if tags are exits in request , tag are not in database then create new tag and all tag id push in one array 
         if ($request->tags) {
             foreach ($request->tags as $key => $value) {
                 Tag::firstOrCreate(['title' => $value]);
@@ -77,7 +79,7 @@ class NoteController extends Controller
             }
         }
 
-
+        // create new note 
         $notes = new Note();
         $notes->user_id = Auth::user()->id;
         $notes->title = $request->input('title');
@@ -85,19 +87,17 @@ class NoteController extends Controller
         $notes->save();
         $notes->tags()->attach($tags);
 
-
-        foreach ($request->todo_list as $key => $value) {
+        // store todo 
+        foreach ($request->todo_list as  $todoTitle) {
             Todo::create([
                 'user_id' => Auth::user()->id,
-                'note_id' => Note::latest()->first()->id,
-                'title' => $value,
+                'note_id' => $notes->id,
+                'title' => $todoTitle,
                 'index_no' => Todo::max('index_no') + 1,
             ]);
         }
 
         return redirect('notes')->with('success', 'Note created successfully!');
-        // return back()->with('success', 'Note created successfully!');
-
     }
 
     /**
@@ -122,11 +122,10 @@ class NoteController extends Controller
         $notes = Note::find($id);
         $todos = Todo::where('user_id', Auth::user()->id)->where('note_id', $id)->get();
         return view('user.editnote', ['notes' => $notes, 'todos' => $todos]);
-        // return response()->json($notes);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update Note.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -196,7 +195,7 @@ class NoteController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * delete note and note todos.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -204,7 +203,6 @@ class NoteController extends Controller
     public function destroy($id)
     {
         $notes = Note::find($id);
-        $notes->tags()->detach();
         $notes->delete();
         return response()->json(['type' => 'success', 'message' => 'Note Deleted successfully!']);
     }

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Note;
 use App\Models\User;
-use Illuminate\Http\Request;
+
 
 class AdminDashController extends Controller
 {
@@ -13,34 +13,30 @@ class AdminDashController extends Controller
         $this->middleware('auth');
     }
 
+
+    // Return Total user count and total notes too show admin dash.
     public function index()
     {
-        return view('admin.home',['totalUser'=>User::count(),'totalNotes' => Note::count()]);
+        return view('admin.home', ['totalUser' => User::count(), 'totalNotes' => Note::count()]);
     }
 
+    // return all notes list 
     public function notes()
     {
-        
-        return view('admin.notes',['notes'=>Note::simplePaginate(15)]);
+        return view('admin.notes', ['notes' => Note::simplePaginate(15)]);
     }
+
+    // return notes todos, if admin view note 1 then return note 1 all todos. 
     public function todos($id)
     {
-        // dd(Note::find($id)->with('todo')->get());
-        return view('admin.todos',['todos'=>Note::find($id)->with('todo')->get()]);
-        
+        return view('admin.todos', ['todos' => Note::find($id)->with('todo')->get()]);
     }
 
-    public function userBan($id)
+    // change user status block and unblock
+    public function changeUserStatus($id, $status)
     {
         User::where('id', $id)
-            ->update(['active' => 0]);
-        return  back()->withInput();
-    }
-
-    public function userActive($id)
-    {
-        User::where('id', $id)
-            ->update(['active' => 1]);
+            ->update(['active' => $status]);
         return  back()->withInput();
     }
 }

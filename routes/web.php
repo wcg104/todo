@@ -74,9 +74,7 @@ Route::get('note/{id}/todos', [AdminDashController::class, 'todos'])->middleware
 
 Route::resource('users', AdminController::class)->middleware(['auth', 'admin']);
 
-Route::get('user/ban/{id}', [AdminDashController::class, 'userBan'])->middleware(['auth', 'admin'])->name('admin.ban');
-
-Route::get('user/unban/{id}', [AdminDashController::class, 'userActive'])->middleware(['auth', 'admin'])->name('admin.unban');
+Route::get('user/{id}/{status}', [AdminDashController::class, 'changeUserStatus'])->middleware(['auth', 'admin'])->name('user.status');
 
 Route::post('users/loginas',  [LoginAsUser::class,'loginAs']);
 

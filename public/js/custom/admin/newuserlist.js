@@ -208,7 +208,7 @@ $(function () {
             if (result.isConfirmed) {
                 $.ajax({
                     type: "GET",
-                    url: "" + 'user/ban/' + id,
+                    url: $(this).data("action"),
                     success: function (data) {
                         table.draw();
                         Swal.fire(
@@ -245,7 +245,7 @@ $(function () {
             if (result.isConfirmed) {
                 $.ajax({
                     type: "GET",
-                    url: "" + 'user/unban/' + id,
+                    url: $(this).data("action"),
                     success: function (data) {
                         table.draw();
                         Swal.fire(
