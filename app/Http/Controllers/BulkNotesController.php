@@ -95,6 +95,11 @@ class BulkNotesController extends Controller
                                 $notes->tags()->attach($tag->id);
                             }
                         }
+                    }else{
+                        if ((Note::where('uid', $row[1])->first()->user_id) != Auth::user()->id) {
+                            return response()->json(['type' => 'error', 'message' => 'try diffrent uid']);
+                        }
+
                     }
                     // create new todo 
                     $todos = new Todo;
