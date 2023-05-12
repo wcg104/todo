@@ -112,6 +112,11 @@ class UserTodoController extends Controller
      */
     public function destroy($id)
     {
+        $noteID = Todo::find($id)->note_id;
+        if (Note::find($noteID)->todo()->count()===1) {
+            return response()->json(['type' => 'error', 'message' => 'minimum 1 todo required !']);
+        }
+        
         Todo::find($id)->delete();
         return response()->json(['type' => 'success', 'message' => 'Todo Deleted successfully!']);
     }

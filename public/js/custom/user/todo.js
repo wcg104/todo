@@ -62,9 +62,15 @@ $(function () {
                     }).then(function () {
                         location.reload();
                     });
-
-
-
+                }
+                if(res.type == 'error'){
+                    Swal.fire({
+                        // position: 'top-end',
+                        icon: 'error',
+                        title: res.message,
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                 }
             }
         });
