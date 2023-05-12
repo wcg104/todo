@@ -98,7 +98,7 @@ class HomeController extends Controller
         
         $user->save();
 
-        if (file_exists(public_path($oldImage))) {
+        if ($request->imageRemove == "true" && file_exists(public_path($oldImage))) {
             @unlink(public_path($oldImage));
         }
 
