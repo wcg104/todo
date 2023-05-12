@@ -119,7 +119,7 @@ class UserTodoController extends Controller
     // change todo order using drag and drop
     public function reorder(Request $request)
     {
-        $todos = Todo::all();
+        $todos = Todo::where('note_id',$request->note_id)->get();
         foreach ($todos as $todo) {
             foreach ($request->order as $order) {
                 if ($order['id'] == $todo->id) {

@@ -129,6 +129,7 @@ $(function () {
                 position: index + 1
             });
         });
+        
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -141,7 +142,7 @@ $(function () {
             url: ChangeOrderRoute,
             data: {
                 order: order,
-
+                note_id:note_id,
             },
             success: function (res) {
                 if (res.type == 'success') {

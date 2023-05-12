@@ -78,10 +78,11 @@ $(function () {
 
 
     $('#addUser').click(function () {
+        $('#saveBtn').html('Save Changes');
         $('#saveBtn').val("create-product");
         $('#user_id').val('');
         $('#productForm').trigger("reset");
-        $('#modelHeading').html("Create New Product");
+        $('#modelHeading').html("Create New User");
         $('#ajaxModel').modal('show');
         $("#newuserpassword").show();
         $('.name_err').empty();
@@ -97,7 +98,8 @@ $(function () {
         // $.get("{{ route('users.index') }}" + '/' + user_id + '/edit', function (
         $.get($(this).data('action'), function (
             data) {
-            $('#modelHeading').html("Edit Product");
+            $('#saveBtn').html('Save Changes');
+            $('#modelHeading').html("Edit User");
             $('#saveBtn').val("edit-user");
             $('#ajaxModel').modal('show');
             $("#newuserpassword").hide();
@@ -292,9 +294,9 @@ $(function () {
 
     $('body').on('click', '.loginAs', function() {
         var user_id = $(this).data("id");
-
+        var user_name  =  $(this).parent().prev().prev().prev().prev().text();
         Swal.fire({
-            title: 'Login as User:' + user_id,
+            title: 'Login as User:' + user_name,
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',

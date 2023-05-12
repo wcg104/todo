@@ -3,10 +3,10 @@
     TODO
 @endsection
 
-@section('head')
+{{-- @section('head')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
         integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-@endsection
+@endsection --}}
 
 
 @section('body')
@@ -134,9 +134,6 @@
                                     placeholder="Enter TODO" value="" maxlength="50" required="">
                             </div>
                         </div>
-
-
-
                         <div class="col-sm-offset-2 col-sm-10">
                             <button type="submit" class="btn btn-primary" data-id="{{ $todo->id }}"
                                 data-action="{{ route('todos.update', $todo->id) }}" id="saveBtn" value="create">Save
@@ -155,13 +152,12 @@
 @endsection
 
 @section('script')
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous">
-    </script>
-
+ 
     {{-- re order todos --}}
     <script type="text/javascript" src="//code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         var ChangeOrderRoute = "{{ route('todos.reorder') }}";
-    </script>
+        var note_id = {{$note}};
+        </script>
     <script src="{{asset('/js/custom/user/todo.js')}}"></script>
 @endsection

@@ -68,7 +68,7 @@ class AdminController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'email' => "required|email|unique:users,email,$request->user_id",
-            'number' => 'required',
+            'number' => 'required|regex:/^(\+\d{1,3}[- ]?)?\d{10}$/',
 
         ]);
         if ($validator->fails()) {

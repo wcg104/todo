@@ -2,6 +2,17 @@
 @section('title')
     User List
 @endsection
+@section('head')
+<style>
+    .error {
+    color: #5a5c69;
+    font-size: 1rem !important;
+    position: relative;
+    line-height: 1;
+    width: 12.5rem;
+}
+</style>
+@endsection
 
 @section('body')
     <div class="row m-4">
@@ -98,7 +109,7 @@
                         <div class="form-group" id="newuserpassword" aria-hidden="true">
                             <label class="col-sm-2 control-label">Password</label>
                             <div class="col-sm-12">
-                                <input id="password" name="password" required="" placeholder="Enter Password"
+                                <input id="password" name="password" type="password" required="" placeholder="Enter Password"
                                     class="form-control" required="">
                             </div>
                             <span class="text-danger error-text password_err ml-2"></span>

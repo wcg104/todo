@@ -144,13 +144,9 @@ class NoteController extends Controller
 
 
         // note title update
-
         $notes = Note::find($id);
-        $notes->title = $request->title;
-        $notes->priority_level = $request->Priority_level;
-        $notes->save();
+        $notes->update(['title'=>$request->title],['priority_level'=>$request->Priority_level]);
         $notes->tags()->sync($tags);
-
 
 
 
@@ -202,8 +198,8 @@ class NoteController extends Controller
      */
     public function destroy($id)
     {
-        $notes = Note::find($id);
-        $notes->delete();
+        Note::find($id)->delete();
+     
         return response()->json(['type' => 'success', 'message' => 'Note Deleted successfully!']);
     }
 }

@@ -38,7 +38,6 @@ class BulkNotesController extends Controller
      */
     public function dataStore(Request $request)
     {
-        // dd($request->all());
         $rules = [
             '0' => 'required|string',
             '1' => 'required|regex:/^\S*$/u',
@@ -56,10 +55,9 @@ class BulkNotesController extends Controller
 
         foreach ($csvData as $rowIndex => $row) {
             if (!$rowIndex) {
-                if (!(count($row)==6)) {
-                    // return back()->with('error', 'invalid format ');
-                    return response()->json(['type' => 'error', 'message' => 'invalid file format']);
+                if (!(count($row) == 6)) {
 
+                    return response()->json(['type' => 'error', 'message' => 'invalid file format']);
                 }
                 $rowValidator = Validator::make($row, [
                     '0' => 'required',
@@ -69,7 +67,6 @@ class BulkNotesController extends Controller
                     '4' => 'required',
                     '5' => 'required',
                 ]);
-                
             } else {
                 $rowValidator = Validator::make($row, $rules);
             }
@@ -78,7 +75,7 @@ class BulkNotesController extends Controller
             } else {
                 $validRows[] = $row;
                 // dd($validRows);
-                if ($rowIndex && count($row) > 1 && count($validRows)>0) {
+                if ($rowIndex && count($row) > 1 && count($validRows) > 0) {
                     if (!Note::where('uid', $row[1])->exists()) {
                         // create new note
                         $notes = new Note;
@@ -95,11 +92,10 @@ class BulkNotesController extends Controller
                                 $notes->tags()->attach($tag->id);
                             }
                         }
-                    }else{
+                    } else {
                         if ((Note::where('uid', $row[1])->first()->user_id) != Auth::user()->id) {
                             return response()->json(['type' => 'error', 'message' => 'try diffrent uid']);
                         }
-
                     }
                     // create new todo 
                     $todos = new Todo;
@@ -116,23 +112,18 @@ class BulkNotesController extends Controller
                             Log::info(getimagesize($row[5]));
                             $b64image = base64_encode($image);
                             $image = base64_decode($b64image);
-                            $image_name = time().".png";
-                            Storage::disk('public')->put('todoImage/'.$image_name,$image);
-                            
+                            $image_name = time() . ".png";
+                            Storage::disk('public')->put('todoImage/' . $image_name, $image);
                         }
                     }
                     $todos->file =  $image_name;
                     $todos->save();
                 }
-             
             }
         }
         $TotalRows = count($csvData);
         $ValidRows = count($validRows);
         $InvalidRows = count($errors);
-        return response()->json(['type' => 'success', 'message' => 'file updated successfully','TotalRows'=>$TotalRows,'ValidRows'=>$ValidRows,'InvalidRows'=>$InvalidRows]);
-
-      
-
+        return response()->json(['type' => 'success', 'message' => 'file updated successfully', 'TotalRows' => $TotalRows, 'ValidRows' => $ValidRows, 'InvalidRows' => $InvalidRows]);
     }
 }
