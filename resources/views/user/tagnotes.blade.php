@@ -62,18 +62,10 @@
                                         @endif
                                     </td>
                                     <td class="align-middle">
-                                        {{-- @php
-                                        use App\Models\Note;
-
-                                            $tags = Note::find($note->id)->tags;
-                                        @endphp --}}
-                                        @if ($tags->find($note->id)->tags)
-                                            @foreach ($tags->find($note->id)->tags as $tag)
-                                                <span class="badge badge-primary">{{ $tag->title }}</span>
-                                            @endforeach
-                                        @endif
-
-
+                                
+                                        @foreach ($note->tags as $tag)
+                                            <span class="badge badge-primary">{{ $tag->title }}</span>
+                                        @endforeach
 
                                     </td>
                                     <td class="align-middle">
@@ -83,7 +75,8 @@
                                     <td class="align-middle">
                                         {{-- <a href="{{ route('notes.done', ['id' => $note->id]) }}" data-mdb-toggle="tooltip" title="Done"><i
                                                 class="fas fa-check text-success me-3 mr-3"></i></a> --}}
-                                        <a class="noteDone" data-id={{ $note->id }} data-action={{route('notes.done', $note->id)}} title="Done"><i
+                                        <a class="noteDone" data-id={{ $note->id }}
+                                            data-action={{ route('notes.done', $note->id) }} title="Done"><i
                                                 class="fas fa-check text-success me-3 mr-3"></i></a>
 
                                         <a title="Remove" data-id="{{ $note->id }}"
@@ -93,14 +86,16 @@
                                         <a href="{{ route('notes.edit', ['note' => $note->id]) }}" data-mdb-toggle="tooltip"
                                             title="edit"><i class="fas fa-pencil-alt mr-3 text-secondary"
                                                 aria-hidden="true"></i></a>
-                                        <a href="{{ route('notes.show', ['note' => $note->id]) }}" data-mdb-toggle="tooltip"
-                                            title="view"><i class="fa fa-eye mr-3" aria-hidden="true"></i></a>
+                                        <a href="{{ route('notes.show', ['note' => $note->id]) }}"
+                                            data-mdb-toggle="tooltip" title="view"><i class="fa fa-eye mr-3"
+                                                aria-hidden="true"></i></a>
 
                                         {{-- <a href="{{ route('notes.archive', ['id' => $note->id])}}" data-mdb-toggle="tooltip"
                                             title="archive"><i class="fa fa-archive text-secondary" aria-hidden="true"></i></a> --}}
 
-                                        <a title="archive" data-id="{{ $note->id }}" data-action="{{ route('notes.archive', [$note->id,'1']) }}" class="archiveNote"><i
-                                                class="fa fa-archive text-secondary"></i></a>
+                                        <a title="archive" data-id="{{ $note->id }}"
+                                            data-action="{{ route('notes.archive', [$note->id, '1']) }}"
+                                            class="archiveNote"><i class="fa fa-archive text-secondary"></i></a>
                                     </td>
                             @endforeach
                         </tbody>

@@ -6,7 +6,7 @@ use App\Models\Note;
 use App\Models\Todo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\Log;
 
 class UserTodoController extends Controller
 {
@@ -27,11 +27,9 @@ class UserTodoController extends Controller
     public function index($id)
     {
 
-        if (Note::find($id)->user_id == Auth::user()->id) {
-            return view('user.todo', ['note' => $id, 'todos' => Note::with('todo')->where('user_id', Auth::user()->id)->find($id)->todo]);
-        } else {
-            return redirect(Route('user.dash'));
-        }
+        if (Note::find($id)->user_id == Auth::user()->id) return view('user.todo', ['note' => $id, 'todos' => Todo::where('note_id', $id)->orderBy('index_no')->simplePaginate(50)]);
+
+        return redirect(Route('user.dash'));
     }
 
     /**
@@ -87,8 +85,7 @@ class UserTodoController extends Controller
      */
     public function edit($id)
     {
-        $product = Todo::find($id);
-        return response()->json($product);
+        return response()->json(Todo::find($id));
     }
 
     /**
@@ -98,7 +95,7 @@ class UserTodoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         Todo::find($request->todo_id)->update(['title' => $request->name, 'updated_at' => now()]);
         return response()->json(['type' => 'success', 'message' => 'Todo Updated successfully!']);
@@ -114,10 +111,9 @@ class UserTodoController extends Controller
     {
         // dd(Todo::find($id)->note_id);
         $todo = Todo::find($id);
-        
-        if (Todo::where('note_id',$todo->note_id)->count()===1) {
-            return response()->json(['type' => 'error', 'message' => 'minimum 1 todo required !']);
-        }
+
+        if (Todo::where('note_id', $todo->note_id)->count() === 1)  return response()->json(['type' => 'error', 'message' => 'minimum 1 todo required !']);
+
         $todo->delete();
         return response()->json(['type' => 'success', 'message' => 'Todo Deleted successfully!']);
     }
@@ -125,14 +121,14 @@ class UserTodoController extends Controller
     // change todo order using drag and drop
     public function reorder(Request $request)
     {
-        $todos = Todo::where('note_id',$request->note_id)->get();
-        foreach ($todos as $todo) {
-            foreach ($request->order as $order) {
-                if ($order['id'] == $todo->id) {
-                    $todo->update(['index_no' => $order['position']]);
-                }
-            }
+        // $start = microtime(true);
+
+        foreach ($request->order as $order) {
+            Todo::findOrFail($order['id'])->update(['index_no' => $order['position']]);
         }
+
+        // $time = microtime(true) - $start;
+        // Log::info($time);
         return response()->json(['type' => 'success', 'message' => 'Todo Order Updated !']);
     }
 }

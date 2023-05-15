@@ -104,10 +104,11 @@
                                 </tr>
                             @endforeach
                             @php
-                                // dd($todos[0]->note_id);
                                 $note_id = $todos[0]->note_id;
                             @endphp
-
+                            <tr>
+                                <td colspan="3">{{ $todos->links() }}</td>
+                            </tr>
                         </tbody>
                     </table>
 

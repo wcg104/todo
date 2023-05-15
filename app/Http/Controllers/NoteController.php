@@ -119,9 +119,7 @@ class NoteController extends Controller
      */
     public function edit($id)
     {
-        $notes = Note::find($id);
-        $todos = Todo::where('user_id', Auth::user()->id)->where('note_id', $id)->get();
-        return view('user.editnote', ['notes' => $notes, 'todos' => $todos]);
+        return view('user.editnote', ['notes' =>  Note::find($id), 'todos' => Todo::where('user_id', Auth::user()->id)->where('note_id', $id)->get()]);
     }
 
     /**

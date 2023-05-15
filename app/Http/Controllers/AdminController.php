@@ -116,8 +116,7 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        $users = User::find($id);
-        return response()->json($users);
+        return response()->json(User::find($id));
     }
 
     /**

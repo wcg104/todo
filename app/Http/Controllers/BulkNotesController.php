@@ -49,7 +49,6 @@ class BulkNotesController extends Controller
 
         $file = $request->file('data');
         $csvData = array_map('str_getcsv', file($file));
-        $validator = Validator::make([], []);
         $validRows = [];
         $errors = [];
 

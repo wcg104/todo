@@ -47,10 +47,7 @@ class HomeController extends Controller
 
 
         //Match The Old Password
-        if (!Hash::check($request->old_password, auth()->user()->password)) {
-            return back()->with("error", "Old Password Doesn't match!");
-        }
-
+        if (!Hash::check($request->old_password, auth()->user()->password)) return back()->with("error", "Old Password Doesn't match!");
 
         //Update the new Password
         User::whereId(auth()->user()->id)->update([
@@ -62,8 +59,7 @@ class HomeController extends Controller
     // Show Update user Profile  dashboard
     public function updateProfile()
     {
-        $user = Auth::user();
-        return view('user.profileedit',['user'=>$user]);
+        return view('user.profileedit',['user'=>Auth::user()]);
     }
 
     /**
@@ -96,7 +92,7 @@ class HomeController extends Controller
             $user->image = null;
         }
         
-        $user->save();
+        $user->update();
 
         if ($request->imageRemove == "true" && file_exists(public_path($oldImage))) {
             @unlink(public_path($oldImage));

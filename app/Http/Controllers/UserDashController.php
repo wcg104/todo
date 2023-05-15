@@ -72,9 +72,6 @@ class UserDashController extends Controller
     // get not list fliter by tags
     public function tagNotes($tag)
     {
-        $notes = Tag::where('title', $tag)->with('notes')->first()->notes;
-        $tags = Note::with('tags')->get();
-
-        return view('user.tagnotes', ['notes' => $notes, 'tags' => $tags]);
+        return view('user.tagnotes', ['notes' => Tag::where('title', $tag)->with('notes')->first()->notes]);
     }
 }
